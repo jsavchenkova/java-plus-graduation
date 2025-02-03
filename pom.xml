@@ -26,9 +26,6 @@
 		<module>core</module>
 		<module>stats</module>
 		<module>infra</module>
-		<module>infra/config-server</module>
-		<module>infra/discovery-server</module>
-		<module>infra/gateway</module>
 	</modules>
 
 	<build>
