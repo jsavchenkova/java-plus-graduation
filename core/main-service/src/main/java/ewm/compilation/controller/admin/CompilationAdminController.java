@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @Validated
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/admin/compilations")
+@RequestMapping("api/v1/main-service/admin/compilations")
 public class CompilationAdminController {
 	private final CompilationService compilationService;
 

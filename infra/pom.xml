@@ -13,8 +13,6 @@
     <packaging>pom</packaging>
     <modules>
         <module>discovery-server</module>
-        <module>config-server</module>
-        <module>gateway-server</module>
     </modules>
 
     <properties>

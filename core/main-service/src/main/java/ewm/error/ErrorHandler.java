@@ -14,13 +14,13 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class ErrorHandler {
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler({MethodArgumentNotValidException.class, MissingServletRequestParameterException.class})
-    public ErrorResponse handleDateTimeParseException(MethodArgumentNotValidException e) {
-        return new ErrorResponse(HttpStatus.BAD_REQUEST,
-                "Ошибка Валидации",
-                e.getMessage());
-    }
+//    @ResponseStatus(HttpStatus.BAD_REQUEST)
+//    @ExceptionHandler({MethodArgumentNotValidException.class, MissingServletRequestParameterException.class})
+//    public ErrorResponse handleDateTimeParseException(MethodArgumentNotValidException e) {
+//        return new ErrorResponse(HttpStatus.BAD_REQUEST,
+//                "Ошибка Валидации",
+//                e.getMessage());
+//    }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler({NotFoundException.class})

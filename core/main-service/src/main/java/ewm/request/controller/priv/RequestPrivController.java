@@ -14,7 +14,7 @@ import java.util.List;
 @Validated
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/users/{userId}/requests")
+@RequestMapping("api/v1/main-service/users/{userId}/requests")
 public class RequestPrivController {
 	private final RequestService requestService;
 
