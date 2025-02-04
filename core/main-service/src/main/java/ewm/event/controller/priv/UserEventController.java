@@ -15,7 +15,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping(path = "api/v1/main-service/users/{userId}/events")
+@RequestMapping(path = "users/{userId}/events")
 @RequiredArgsConstructor
 public class UserEventController {
 	private final EventService service;

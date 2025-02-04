@@ -6,9 +6,8 @@ spring:
         - id: main-service_route
           uri: lb://main-service
           predicates:
-            - Path=/main-service/**
-          filters:
-            - PrefixPath=api/v1
+            - Path=/admin/**
+
 
 server:
   port: 8080

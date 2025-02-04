@@ -12,7 +12,6 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("api/v1/main-service")
 public class CommentController {
     private final CommentService commentService;
     private static final String PRIVATE_PATH = "/users/{userId}/events/{eventId}/comments";

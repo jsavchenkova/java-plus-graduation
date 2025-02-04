@@ -17,7 +17,7 @@ import java.util.List;
 @Validated
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("api/v1/main-service/admin/events")
+@RequestMapping("admin/events")
 public class AdminEventController {
 	private final EventService eventService;
 
