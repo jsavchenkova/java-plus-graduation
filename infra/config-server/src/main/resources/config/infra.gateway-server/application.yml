@@ -7,6 +7,10 @@ spring:
           uri: lb://main-service
           predicates:
             - Path=/admin/**
+            - Path=/users/**
+            - Path=/events/**
+            - Path=/compilations/**
+            - Path=/categories/**
 
 
 server:
