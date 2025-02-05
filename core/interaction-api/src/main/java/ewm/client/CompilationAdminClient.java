@@ -1,0 +1,26 @@
+package ewm.client;
+
+import jakarta.validation.Valid;
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+import ewm.dto.compilation.CompilationDto;
+import ewm.dto.compilation.CompilationDtoResponse;
+import ewm.dto.compilation.CompilationDtoUpdate;
+
+@FeignClient(name = "compilation-admin-client")
+public interface CompilationAdminClient {
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping
+    public CompilationDtoResponse createCompilation(@RequestBody @Valid CompilationDto compilationDto);
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/{compId}")
+    public void deleteCompilation(@PathVariable Long compId) ;
+
+    @PatchMapping("/{compId}")
+    CompilationDtoResponse updateCompilation(@PathVariable Long compId,
+                                             @RequestBody @Valid CompilationDtoUpdate compilationDto);
+
+}

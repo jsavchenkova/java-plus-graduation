@@ -1,7 +1,7 @@
 package ewm.event;
 
-import ewm.event.dto.*;
-import ewm.request.dto.RequestDto;
+import ewm.dto.event.*;
+import ewm.dto.request.RequestDto;
 import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.List;

@@ -1,6 +1,6 @@
 package ewm.request.service;
 
-import ewm.request.dto.RequestDto;
+import ewm.dto.request.RequestDto;
 
 import java.util.List;
 

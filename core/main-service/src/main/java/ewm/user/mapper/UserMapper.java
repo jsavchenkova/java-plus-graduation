@@ -1,7 +1,7 @@
 package ewm.user.mapper;
 
-import ewm.user.dto.UserDto;
-import ewm.user.model.User;
+import ewm.dto.user.UserDto;
+import ewm.model.User;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 

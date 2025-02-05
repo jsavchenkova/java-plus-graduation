@@ -1,11 +1,11 @@
 package ewm.event.mapper;
 
 import ewm.category.mapper.CategoryMapper;
-import ewm.event.dto.CreateEventDto;
-import ewm.event.dto.EventDto;
-import ewm.event.dto.LocationDto;
-import ewm.event.dto.UpdateEventDto;
-import ewm.event.model.Event;
+import ewm.dto.event.CreateEventDto;
+import ewm.dto.event.EventDto;
+import ewm.dto.event.LocationDto;
+import ewm.dto.event.UpdateEventDto;
+import ewm.model.Event;
 import ewm.user.mapper.UserMapper;
 
 import java.time.LocalDateTime;

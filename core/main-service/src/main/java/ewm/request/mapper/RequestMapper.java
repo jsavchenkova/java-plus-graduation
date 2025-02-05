@@ -1,7 +1,7 @@
 package ewm.request.mapper;
 
-import ewm.request.dto.RequestDto;
-import ewm.request.model.Request;
+import ewm.dto.request.RequestDto;
+import ewm.model.Request;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;

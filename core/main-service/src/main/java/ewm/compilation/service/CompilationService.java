@@ -1,8 +1,8 @@
 package ewm.compilation.service;
 
-import ewm.compilation.dto.CompilationDto;
-import ewm.compilation.dto.CompilationDtoResponse;
-import ewm.compilation.dto.CompilationDtoUpdate;
+import ewm.dto.compilation.CompilationDto;
+import ewm.dto.compilation.CompilationDtoResponse;
+import ewm.dto.compilation.CompilationDtoUpdate;
 
 import java.util.List;
 

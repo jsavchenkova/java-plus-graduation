@@ -1,6 +1,6 @@
 package ewm.comment.repository;
 
-import ewm.comment.model.Comment;
+import ewm.model.Comment;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

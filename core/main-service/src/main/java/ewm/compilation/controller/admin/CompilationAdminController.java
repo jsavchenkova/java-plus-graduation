@@ -1,8 +1,9 @@
 package ewm.compilation.controller.admin;
 
-import ewm.compilation.dto.CompilationDto;
-import ewm.compilation.dto.CompilationDtoResponse;
-import ewm.compilation.dto.CompilationDtoUpdate;
+import ewm.client.CompilationAdminClient;
+import ewm.dto.compilation.CompilationDto;
+import ewm.dto.compilation.CompilationDtoResponse;
+import ewm.dto.compilation.CompilationDtoUpdate;
 import ewm.compilation.service.CompilationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RequiredArgsConstructor
 @RequestMapping("admin/compilations")
-public class CompilationAdminController {
+public class CompilationAdminController implements CompilationAdminClient {
 	private final CompilationService compilationService;
 
 	@ResponseStatus(HttpStatus.CREATED)
@@ -34,8 +35,8 @@ public class CompilationAdminController {
 	}
 
 	@PatchMapping("/{compId}")
-	CompilationDtoResponse updateCompilation(@PathVariable Long compId,
-											 @RequestBody @Valid CompilationDtoUpdate compilationDto) {
+	public CompilationDtoResponse updateCompilation(@PathVariable Long compId,
+													@RequestBody @Valid CompilationDtoUpdate compilationDto) {
 		log.info("Обновить подборку по compId --> {}, подборка --> {}", compId, compilationDto);
 		return compilationService.updateCompilation(compId, compilationDto);
 	}

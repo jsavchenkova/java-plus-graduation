@@ -2,9 +2,9 @@ package ewm.user.service;
 
 import ewm.error.exception.ExistException;
 import ewm.error.exception.NotFoundException;
-import ewm.user.dto.UserDto;
+import ewm.dto.user.UserDto;
 import ewm.user.mapper.UserMapper;
-import ewm.user.model.User;
+import ewm.model.User;
 import ewm.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

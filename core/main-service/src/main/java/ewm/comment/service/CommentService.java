@@ -1,7 +1,7 @@
 package ewm.comment.service;
 
-import ewm.comment.dto.CommentDto;
-import ewm.comment.dto.CreateCommentDto;
+import ewm.dto.comment.CommentDto;
+import ewm.dto.comment.CreateCommentDto;
 
 import java.util.List;
 

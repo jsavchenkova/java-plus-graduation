@@ -1,15 +1,15 @@
 package ewm.comment.service;
 
-import ewm.comment.dto.CommentDto;
-import ewm.comment.dto.CreateCommentDto;
+import ewm.dto.comment.CommentDto;
+import ewm.dto.comment.CreateCommentDto;
 import ewm.comment.mapper.CommentMapper;
-import ewm.comment.model.Comment;
+import ewm.model.Comment;
 import ewm.comment.repository.CommentRepository;
 import ewm.error.exception.ConflictException;
 import ewm.error.exception.NotFoundException;
 import ewm.event.EventRepository;
-import ewm.event.model.Event;
-import ewm.user.model.User;
+import ewm.model.Event;
+import ewm.model.User;
 import ewm.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

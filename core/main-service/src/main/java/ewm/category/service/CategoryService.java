@@ -1,7 +1,7 @@
 package ewm.category.service;
 
-import ewm.category.dto.CategoryDto;
-import ewm.category.dto.CreateCategoryDto;
+import ewm.dto.category.CategoryDto;
+import ewm.dto.category.CreateCategoryDto;
 
 import java.util.List;
 

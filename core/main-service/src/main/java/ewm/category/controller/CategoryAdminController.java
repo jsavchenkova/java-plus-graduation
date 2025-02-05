@@ -1,7 +1,8 @@
 package ewm.category.controller;
 
-import ewm.category.dto.CategoryDto;
-import ewm.category.dto.CreateCategoryDto;
+import ewm.client.CategoryAdminClient;
+import ewm.dto.category.CategoryDto;
+import ewm.dto.category.CreateCategoryDto;
 import ewm.category.service.CategoryService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -18,23 +19,23 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("admin/categories")
-public class CategoryAdminController {
+public class CategoryAdminController implements CategoryAdminClient {
     private final CategoryService categoryService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    CategoryDto addCategory(@RequestBody @Valid CreateCategoryDto createCategoryDto) {
+    public CategoryDto addCategory(@RequestBody @Valid CreateCategoryDto createCategoryDto) {
         return categoryService.add(createCategoryDto);
     }
 
     @DeleteMapping("/{categoryId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    void deleteCategory(@PathVariable Long categoryId) {
+    public void deleteCategory(@PathVariable Long categoryId) {
         categoryService.delete(categoryId);
     }
 
     @PatchMapping("/{categoryId}")
-    CategoryDto updateCategory(@PathVariable Long categoryId, @RequestBody @Valid CreateCategoryDto createCategoryDto) {
+    public CategoryDto updateCategory(@PathVariable Long categoryId, @RequestBody @Valid CreateCategoryDto createCategoryDto) {
         return categoryService.update(categoryId, createCategoryDto);
     }
 }

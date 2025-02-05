@@ -1,6 +1,7 @@
 package ewm.compilation.controller.pub;
 
-import ewm.compilation.dto.CompilationDtoResponse;
+import ewm.client.CompilationPubClient;
+import ewm.dto.compilation.CompilationDtoResponse;
 import ewm.compilation.service.CompilationService;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
@@ -16,7 +17,7 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @RequestMapping("compilations")
-public class CompilationPubController {
+public class CompilationPubController implements CompilationPubClient {
 	private final CompilationService compilationService;
 
 	@GetMapping

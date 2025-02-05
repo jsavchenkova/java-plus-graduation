@@ -1,14 +1,14 @@
 package ewm.compilation.service;
 
-import ewm.compilation.dto.CompilationDto;
-import ewm.compilation.dto.CompilationDtoResponse;
-import ewm.compilation.dto.CompilationDtoUpdate;
+import ewm.dto.compilation.CompilationDto;
+import ewm.dto.compilation.CompilationDtoResponse;
+import ewm.dto.compilation.CompilationDtoUpdate;
 import ewm.compilation.mapper.CompilationMapper;
-import ewm.compilation.model.Compilation;
+import ewm.model.Compilation;
 import ewm.compilation.repositry.CompilationRepository;
 import ewm.error.exception.NotFoundException;
 import ewm.event.EventRepository;
-import ewm.event.model.Event;
+import ewm.model.Event;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;

@@ -1,9 +1,10 @@
 package ewm.event.controller.admin;
 
 import ewm.event.EventService;
-import ewm.event.dto.AdminGetEventRequestDto;
-import ewm.event.dto.EventDto;
-import ewm.event.dto.UpdateEventDto;
+import ewm.client.EventAdminClient;
+import ewm.dto.event.AdminGetEventRequestDto;
+import ewm.dto.event.EventDto;
+import ewm.dto.event.UpdateEventDto;
 import ewm.event.validate.EventValidate;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +19,7 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @RequestMapping("admin/events")
-public class AdminEventController {
+public class AdminEventController implements EventAdminClient {
 	private final EventService eventService;
 
 	@GetMapping

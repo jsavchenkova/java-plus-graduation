@@ -1,8 +1,9 @@
 package ewm.event.controller.pub;
 
 import ewm.event.EventService;
-import ewm.event.dto.EventDto;
-import ewm.event.dto.PublicGetEventRequestDto;
+import ewm.client.EventPubClietn;
+import ewm.dto.event.EventDto;
+import ewm.dto.event.PublicGetEventRequestDto;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +20,7 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @RequestMapping("events")
-public class PublicEventController {
+public class PublicEventController implements EventPubClietn {
 	private final EventService eventService;
 
 	@GetMapping
@@ -29,8 +30,8 @@ public class PublicEventController {
 	}
 
 	@GetMapping("/{id}")
-	EventDto publicGetEvent(@PathVariable Long id,
-							HttpServletRequest request) {
+	public EventDto publicGetEvent(@PathVariable Long id,
+								   HttpServletRequest request) {
 		return eventService.publicGetEvent(id, request);
 	}
 }

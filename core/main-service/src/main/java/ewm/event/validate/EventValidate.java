@@ -1,8 +1,8 @@
 package ewm.event.validate;
 
 import ewm.error.exception.ValidationException;
-import ewm.event.dto.CreateEventDto;
-import ewm.event.dto.UpdateEventDto;
+import ewm.dto.event.CreateEventDto;
+import ewm.dto.event.UpdateEventDto;
 import org.slf4j.Logger;
 
 import java.time.LocalDateTime;

@@ -1,6 +1,7 @@
 package ewm.request.controller.priv;
 
-import ewm.request.dto.RequestDto;
+import ewm.client.RequestPrivClient;
+import ewm.dto.request.RequestDto;
 import ewm.request.service.RequestService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +16,7 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @RequestMapping("users/{userId}/requests")
-public class RequestPrivController {
+public class RequestPrivController implements RequestPrivClient {
 	private final RequestService requestService;
 
 	@GetMapping
@@ -33,8 +34,8 @@ public class RequestPrivController {
 	}
 
 	@PatchMapping("/{requestId}/cancel")
-	RequestDto cancelRequest(@PathVariable Long userId,
-							 @PathVariable Long requestId) {
+	public RequestDto cancelRequest(@PathVariable Long userId,
+									@PathVariable Long requestId) {
 		log.info("Отменить запрос по userId --> {}, requestId --> {}", userId, requestId);
 		return requestService.cancelRequest(userId, requestId);
 	}
