@@ -1,12 +1,12 @@
 package ewm.client;
 
 import ewm.dto.event.*;
+import ewm.dto.request.RequestDto;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import ewm.dto.request.RequestDto;
 
 import java.util.List;
 

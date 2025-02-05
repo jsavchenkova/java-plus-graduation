@@ -1,12 +1,12 @@
 package ewm.client;
 
+import ewm.dto.compilation.CompilationDtoResponse;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
-import ewm.dto.compilation.CompilationDtoResponse;
 
 import java.util.List;
 

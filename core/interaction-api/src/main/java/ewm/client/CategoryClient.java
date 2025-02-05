@@ -14,7 +14,7 @@ public interface CategoryClient {
     List<CategoryDto> getCategories(
             @RequestParam(defaultValue = "0") Integer from,
             @RequestParam(defaultValue = "10") Integer size
-    ) ;
+    );
 
     @GetMapping("/{categoryId}")
     CategoryDto getCategory(@PathVariable Long categoryId);

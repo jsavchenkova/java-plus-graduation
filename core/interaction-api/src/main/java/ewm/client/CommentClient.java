@@ -1,11 +1,11 @@
 package ewm.client;
 
+import ewm.dto.comment.CommentDto;
+import ewm.dto.comment.CreateCommentDto;
 import jakarta.validation.Valid;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import ewm.dto.comment.CommentDto;
-import ewm.dto.comment.CreateCommentDto;
 
 import java.util.List;
 

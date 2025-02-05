@@ -1,12 +1,12 @@
 package ewm.client;
 
+import ewm.dto.compilation.CompilationDto;
+import ewm.dto.compilation.CompilationDtoResponse;
+import ewm.dto.compilation.CompilationDtoUpdate;
 import jakarta.validation.Valid;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import ewm.dto.compilation.CompilationDto;
-import ewm.dto.compilation.CompilationDtoResponse;
-import ewm.dto.compilation.CompilationDtoUpdate;
 
 @FeignClient(name = "compilation-admin-client")
 public interface CompilationAdminClient {
