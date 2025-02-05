@@ -16,7 +16,7 @@ public interface CompilationPubClient {
     @GetMapping
     public List<CompilationDtoResponse> getCompilations(@RequestParam(required = false) Boolean pinned,
                                                         @PositiveOrZero @RequestParam(name = "from", defaultValue = "0") Integer from,
-                                                        @Positive @RequestParam(name = "size", defaultValue = "10") Integer size) ;
+                                                        @Positive @RequestParam(name = "size", defaultValue = "10") Integer size);
 
     @GetMapping("/{compId}")
     public CompilationDtoResponse getCompilations(@PathVariable Long compId);

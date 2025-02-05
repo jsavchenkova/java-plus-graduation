@@ -17,7 +17,7 @@ public interface CompilationAdminClient {
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{compId}")
-    public void deleteCompilation(@PathVariable Long compId) ;
+    public void deleteCompilation(@PathVariable Long compId);
 
     @PatchMapping("/{compId}")
     CompilationDtoResponse updateCompilation(@PathVariable Long compId,

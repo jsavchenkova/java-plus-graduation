@@ -17,5 +17,5 @@ public interface EventPubClietn {
 
     @GetMapping("/{id}")
     EventDto publicGetEvent(@PathVariable Long id,
-                            HttpServletRequest request) ;
+                            HttpServletRequest request);
 }
