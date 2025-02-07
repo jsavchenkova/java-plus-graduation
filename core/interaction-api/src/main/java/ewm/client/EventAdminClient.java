@@ -16,9 +16,9 @@ import java.util.List;
 public interface EventAdminClient {
 
     @GetMapping
-    public List<EventDto> adminGetEvents(AdminGetEventRequestDto requestParams);
+    List<EventDto> adminGetEvents(AdminGetEventRequestDto requestParams);
 
     @PatchMapping("/{eventId}")
-    public EventDto adminChangeEvent(@PathVariable Long eventId,
-                                     @RequestBody @Valid UpdateEventDto eventDto);
+    EventDto adminChangeEvent(@PathVariable Long eventId,
+                              @RequestBody @Valid UpdateEventDto eventDto);
 }

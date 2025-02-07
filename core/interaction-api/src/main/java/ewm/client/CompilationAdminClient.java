@@ -13,11 +13,11 @@ public interface CompilationAdminClient {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public CompilationDtoResponse createCompilation(@RequestBody @Valid CompilationDto compilationDto);
+    CompilationDtoResponse createCompilation(@RequestBody @Valid CompilationDto compilationDto);
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{compId}")
-    public void deleteCompilation(@PathVariable Long compId);
+    void deleteCompilation(@PathVariable Long compId);
 
     @PatchMapping("/{compId}")
     CompilationDtoResponse updateCompilation(@PathVariable Long compId,

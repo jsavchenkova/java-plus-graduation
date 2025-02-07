@@ -13,7 +13,7 @@ import java.util.List;
 public interface EventPubClietn {
 
     @GetMapping
-    public List<EventDto> publicGetEvents(HttpServletRequest request, PublicGetEventRequestDto requestParams);
+    List<EventDto> publicGetEvents(HttpServletRequest request, PublicGetEventRequestDto requestParams);
 
     @GetMapping("/{id}")
     EventDto publicGetEvent(@PathVariable Long id,

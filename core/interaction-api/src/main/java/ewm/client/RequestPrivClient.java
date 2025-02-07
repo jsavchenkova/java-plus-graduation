@@ -10,12 +10,12 @@ import java.util.List;
 @FeignClient(name = "request-priv-client")
 public interface RequestPrivClient {
     @GetMapping
-    public List<RequestDto> getRequests(@PathVariable Long userId);
+    List<RequestDto> getRequests(@PathVariable Long userId);
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public RequestDto createRequest(@PathVariable Long userId,
-                                    @RequestParam Long eventId);
+    RequestDto createRequest(@PathVariable Long userId,
+                             @RequestParam Long eventId);
 
     @PatchMapping("/{requestId}/cancel")
     RequestDto cancelRequest(@PathVariable Long userId,

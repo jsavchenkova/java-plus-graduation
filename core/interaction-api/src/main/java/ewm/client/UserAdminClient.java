@@ -14,15 +14,15 @@ import java.util.List;
 public interface UserAdminClient {
 
     @GetMapping
-    public List<UserDto> getUsers(@RequestParam(required = false) List<Long> ids,
-                                  @PositiveOrZero @RequestParam(name = "from", defaultValue = "0") Integer from,
-                                  @Positive @RequestParam(name = "size", defaultValue = "10") Integer size);
+    List<UserDto> getUsers(@RequestParam(required = false) List<Long> ids,
+                           @PositiveOrZero @RequestParam(name = "from", defaultValue = "0") Integer from,
+                           @Positive @RequestParam(name = "size", defaultValue = "10") Integer size);
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public UserDto createUser(@RequestBody @Valid UserDto userDto);
+    UserDto createUser(@RequestBody @Valid UserDto userDto);
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{userId}")
-    public void deleteUser(@PathVariable Long userId);
+    void deleteUser(@PathVariable Long userId);
 }

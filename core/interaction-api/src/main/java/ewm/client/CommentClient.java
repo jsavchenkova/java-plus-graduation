@@ -18,18 +18,18 @@ public interface CommentClient {
     List<CommentDto> getEventComments(@PathVariable Long eventId);
 
     @GetMapping(PRIVATE_PATH)
-    public List<CommentDto> getEventCommentsByUserId(@PathVariable Long userId, @PathVariable Long eventId);
+    List<CommentDto> getEventCommentsByUserId(@PathVariable Long userId, @PathVariable Long eventId);
 
     @PostMapping(PRIVATE_PATH)
     @ResponseStatus(HttpStatus.CREATED)
-    public CommentDto addComment(
+    CommentDto addComment(
             @PathVariable Long userId,
             @PathVariable Long eventId,
             @RequestBody @Valid CreateCommentDto createCommentDto
     );
 
     @GetMapping(PUBLIC_PATH + "/{commentId}")
-    public CommentDto getComment(
+    CommentDto getComment(
             @PathVariable Long eventId,
             @PathVariable Long commentId
     );

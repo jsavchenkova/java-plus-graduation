@@ -14,9 +14,11 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 public class CommentController implements CommentClient {
-    private final CommentService commentService;
     private static final String PRIVATE_PATH = "/users/{userId}/events/{eventId}/comments";
     private static final String PUBLIC_PATH = "/events/{eventId}/comments";
+
+    private final CommentService commentService;
+
 
     @GetMapping(PUBLIC_PATH)
     public List<CommentDto> getEventComments(@PathVariable Long eventId) {

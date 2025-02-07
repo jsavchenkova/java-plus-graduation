@@ -22,10 +22,12 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
-    private final CategoryRepository categoryRepository;
-    private final EventRepository eventRepository;
     private static final String CATEGORY_NOT_FOUND = "Category not found";
     private static final String CATEGORY_NAME_EXIST = "Category with this name already exist";
+
+    private final CategoryRepository categoryRepository;
+    private final EventRepository eventRepository;
+
 
     @Override
     public List<CategoryDto> getAll(Integer from, Integer size) {
