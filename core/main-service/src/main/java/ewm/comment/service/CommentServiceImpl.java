@@ -23,11 +23,11 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class CommentServiceImpl implements CommentService {
+    private static final String COMMENT_NOT_FOUND = "Comment not found";
+
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
     private final EventRepository eventRepository;
-
-    private static final String COMMENT_NOT_FOUND = "Comment not found";
 
     @Override
     @Transactional

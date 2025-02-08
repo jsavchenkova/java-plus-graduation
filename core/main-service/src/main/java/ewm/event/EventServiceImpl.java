@@ -40,13 +40,13 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class EventServiceImpl implements EventService {
+    private static final String EVENT_NOT_FOUND_MESSAGE = "Event not found";
+
     private final EventRepository repository;
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
     private final StatisticsService statisticsService;
     private final RequestRepository requestRepository;
-
-    private static final String EVENT_NOT_FOUND_MESSAGE = "Event not found";
 
     @Override
     public List<EventDto> getEvents(Long userId, Integer from, Integer size) {

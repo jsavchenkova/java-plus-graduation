@@ -11,8 +11,8 @@ import java.util.List;
 
 @FeignClient(name = "comment-client")
 public interface CommentClient {
-    static final String PRIVATE_PATH = "/users/{userId}/events/{eventId}/comments";
-    static final String PUBLIC_PATH = "/events/{eventId}/comments";
+    String PRIVATE_PATH = "/users/{userId}/events/{eventId}/comments";
+    String PUBLIC_PATH = "/events/{eventId}/comments";
 
     @GetMapping(PUBLIC_PATH)
     List<CommentDto> getEventComments(@PathVariable Long eventId);

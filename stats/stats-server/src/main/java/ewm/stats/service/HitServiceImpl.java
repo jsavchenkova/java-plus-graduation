@@ -20,9 +20,11 @@ import java.util.List;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class HitServiceImpl implements HitService {
-    private final HitRepository hitRepository;
+
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     private static final String ERROR_MESSAGE = "You need to pass start and end dates";
+
+    private final HitRepository hitRepository;
 
     @Override
     @Transactional
