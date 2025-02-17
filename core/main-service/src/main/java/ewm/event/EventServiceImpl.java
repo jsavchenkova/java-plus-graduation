@@ -1,7 +1,7 @@
 package ewm.event;
 
 import ewm.model.Category;
-import ewm.category.repository.CategoryRepository;
+//import ewm.category.repository.CategoryRepository;
 import ewm.error.exception.ConflictException;
 import ewm.error.exception.NotFoundException;
 import ewm.error.exception.ValidationException;
@@ -23,7 +23,7 @@ import ewm.model.RequestStatus;
 import ewm.request.repository.RequestRepository;
 import ewm.statistics.service.StatisticsService;
 import ewm.model.User;
-import ewm.user.repository.UserRepository;
+//import ewm.user.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -43,8 +43,8 @@ public class EventServiceImpl implements EventService {
     private static final String EVENT_NOT_FOUND_MESSAGE = "Event not found";
 
     private final EventRepository repository;
-    private final UserRepository userRepository;
-    private final CategoryRepository categoryRepository;
+//    private final UserRepository userRepository;
+//    private final CategoryRepository categoryRepository;
     private final StatisticsService statisticsService;
     private final RequestRepository requestRepository;
 
@@ -278,19 +278,21 @@ public class EventServiceImpl implements EventService {
     }
 
     private User getUser(Long userId) {
-        Optional<User> user = userRepository.findById(userId);
-        if (user.isEmpty()) {
-            throw new NotFoundException("Пользователь не найден");
-        }
-        return user.get();
+//        Optional<User> user = userRepository.findById(userId);
+//        if (user.isEmpty()) {
+//            throw new NotFoundException("Пользователь не найден");
+//        }
+//        return user.get();
+        return null;
     }
 
     private Category getCategory(Long categoryId) {
-        Optional<Category> category = categoryRepository.findById(categoryId);
-        if (category.isEmpty()) {
-            throw new NotFoundException("Категория не найдена");
-        }
-        return category.get();
+//        Optional<Category> category = categoryRepository.findById(categoryId);
+//        if (category.isEmpty()) {
+//            throw new NotFoundException("Категория не найдена");
+//        }
+//        return category.get();
+        return null;
     }
 
 

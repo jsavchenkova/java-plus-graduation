@@ -10,7 +10,7 @@ import ewm.error.exception.NotFoundException;
 import ewm.event.EventRepository;
 import ewm.model.Event;
 import ewm.model.User;
-import ewm.user.repository.UserRepository;
+//import ewm.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,7 +26,7 @@ public class CommentServiceImpl implements CommentService {
     private static final String COMMENT_NOT_FOUND = "Comment not found";
 
     private final CommentRepository commentRepository;
-    private final UserRepository userRepository;
+//    private final UserRepository userRepository;
     private final EventRepository eventRepository;
 
     @Override
@@ -96,11 +96,12 @@ public class CommentServiceImpl implements CommentService {
     }
 
     private User getUserById(Long userId) {
-        Optional<User> optionalUser = userRepository.findById(userId);
-        if (optionalUser.isEmpty()) {
-            throw new NotFoundException("User not found");
-        }
-        return optionalUser.get();
+//        Optional<User> optionalUser = userRepository.findById(userId);
+//        if (optionalUser.isEmpty()) {
+//            throw new NotFoundException("User not found");
+//        }
+//        return optionalUser.get();
+        return null;
     }
 
     private Event getEventById(Long eventId) {

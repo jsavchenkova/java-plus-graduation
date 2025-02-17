@@ -11,7 +11,7 @@ import ewm.model.Request;
 import ewm.model.RequestStatus;
 import ewm.request.repository.RequestRepository;
 import ewm.model.User;
-import ewm.user.repository.UserRepository;
+//import ewm.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -28,7 +28,7 @@ import java.util.Optional;
 public class RequestServiceImpl implements RequestService {
     private final RequestRepository requestRepository;
     private final EventRepository eventRepository;
-    private final UserRepository userRepository;
+//    private final UserRepository userRepository;
 
     @Override
     public List<RequestDto> getRequests(Long userId) {
@@ -92,10 +92,11 @@ public class RequestServiceImpl implements RequestService {
     }
 
     private User getUser(Long userId) {
-        Optional<User> user = userRepository.findById(userId);
-        if (user.isEmpty())
-            throw new NotFoundException("Пользователя с id = " + userId.toString() + " не существует");
-        return user.get();
+//        Optional<User> user = userRepository.findById(userId);
+//        if (user.isEmpty())
+//            throw new NotFoundException("Пользователя с id = " + userId.toString() + " не существует");
+//        return user.get();
+        return null;
     }
 
     private Request getRequest(Long requestId) {

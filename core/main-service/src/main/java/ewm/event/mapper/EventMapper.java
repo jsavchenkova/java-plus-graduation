@@ -1,12 +1,12 @@
 package ewm.event.mapper;
 
-import ewm.category.mapper.CategoryMapper;
+//import ewm.category.mapper.CategoryMapper;
 import ewm.dto.event.CreateEventDto;
 import ewm.dto.event.EventDto;
 import ewm.dto.event.LocationDto;
 import ewm.dto.event.UpdateEventDto;
 import ewm.model.Event;
-import ewm.user.mapper.UserMapper;
+//import ewm.user.mapper.UserMapper;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -45,8 +45,8 @@ public class EventMapper {
 				.state(event.getState().toString())
 				.participantLimit(event.getParticipantLimit())
 				.location(LocationDto.builder().lat(event.getLat()).lon(event.getLon()).build())
-				.category(CategoryMapper.INSTANCE.categoryToCategoryDto(event.getCategory()))
-				.initiator(UserMapper.mapToUserDto(event.getInitiator()))
+//				.category(CategoryMapper.INSTANCE.categoryToCategoryDto(event.getCategory()))
+//				.initiator(UserMapper.mapToUserDto(event.getInitiator()))
 				.requestModeration(event.getRequestModeration())
 				.views((event.getViews() == null) ? 0L : event.getViews())
 				.confirmedRequests(event.getConfirmedRequests())
