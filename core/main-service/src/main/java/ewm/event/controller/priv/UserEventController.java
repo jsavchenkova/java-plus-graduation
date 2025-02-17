@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,7 +19,8 @@ import java.util.List;
 @RequestMapping(path = "users/{userId}/events")
 @RequiredArgsConstructor
 public class UserEventController {
-	private final EventService service;
+	@Autowired
+	private  EventService service;
 
 	@GetMapping
 	List<EventDto> getEvents(@PathVariable Long userId,
@@ -31,7 +33,7 @@ public class UserEventController {
 	@PostMapping
 	EventDto createEvent(@PathVariable Long userId,
 						 @Valid @RequestBody CreateEventDto event) {
-		EventValidate.eventDateValidate(event, log);
+//		EventValidate.eventDateValidate(event, log);
 		return service.createEvent(userId, event);
 	}
 
@@ -48,8 +50,8 @@ public class UserEventController {
 	EventDto updateEvent(@PathVariable Long userId,
 						 @PathVariable Long eventId,
 						 @Valid @RequestBody UpdateEventDto event) {
-		EventValidate.updateEventDateValidate(event, log);
-		EventValidate.textLengthValidate(event, log);
+//		EventValidate.updateEventDateValidate(event, log);
+//		EventValidate.textLengthValidate(event, log);
 		return service.updateEvent(userId, event, eventId);
 	}
 

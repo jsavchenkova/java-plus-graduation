@@ -8,6 +8,7 @@ import ewm.stats.StatsClient;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpServerErrorException;
@@ -23,7 +24,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 public class StatisticsServiceImpl implements StatisticsService {
-	private final StatsClient statsClient;
+	@Autowired
+	private  StatsClient statsClient;
 
 	@Override
 	public void saveStats(HttpServletRequest request) {
@@ -67,7 +69,7 @@ public class StatisticsServiceImpl implements StatisticsService {
 			stats = list.stream()
 					.map(e -> mapper.convertValue(e, ViewStatsDTO.class))
 					.collect(Collectors.toList());
-			log.info("Данные статистики --> {}", stats);
+//			log.info("Данные статистики --> {}", stats);
 			return stats.stream()
 					.collect(Collectors.toMap(ViewStats -> getEventIdFromUri(ViewStats.getUri()),
 							ViewStatsDTO::getHits));

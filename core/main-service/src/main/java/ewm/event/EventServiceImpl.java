@@ -26,6 +26,7 @@ import ewm.model.User;
 //import ewm.user.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -42,11 +43,14 @@ import java.util.stream.Collectors;
 public class EventServiceImpl implements EventService {
     private static final String EVENT_NOT_FOUND_MESSAGE = "Event not found";
 
-    private final EventRepository repository;
+    @Autowired
+    private  EventRepository repository;
 //    private final UserRepository userRepository;
 //    private final CategoryRepository categoryRepository;
-    private final StatisticsService statisticsService;
-    private final RequestRepository requestRepository;
+    @Autowired
+    private  StatisticsService statisticsService;
+    @Autowired
+    private  RequestRepository requestRepository;
 
     @Override
     public List<EventDto> getEvents(Long userId, Integer from, Integer size) {

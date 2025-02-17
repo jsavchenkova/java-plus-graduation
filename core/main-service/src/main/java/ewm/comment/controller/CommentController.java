@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,7 +21,8 @@ public class CommentController implements CommentClient {
     private static final String PRIVATE_PATH = "/users/{userId}/events/{eventId}/comments";
     private static final String PUBLIC_PATH = "/events/{eventId}/comments";
 
-    private final CommentService commentService;
+    @Autowired
+    private  CommentService commentService;
 
 
 

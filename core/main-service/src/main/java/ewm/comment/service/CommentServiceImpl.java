@@ -12,6 +12,7 @@ import ewm.model.Event;
 import ewm.model.User;
 //import ewm.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,10 +25,11 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class CommentServiceImpl implements CommentService {
     private static final String COMMENT_NOT_FOUND = "Comment not found";
-
-    private final CommentRepository commentRepository;
+@Autowired
+    private  CommentRepository commentRepository;
 //    private final UserRepository userRepository;
-    private final EventRepository eventRepository;
+    @Autowired
+    private  EventRepository eventRepository;
 
     @Override
     @Transactional
