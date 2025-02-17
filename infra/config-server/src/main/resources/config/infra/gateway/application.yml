@@ -3,10 +3,19 @@ spring:
     gateway:
       discovery.locator.enabled: true
       routes:
+        - id: user-service_route
+          uri: lb://user-service
+          predicates:
+            - Path=/admin/users
+        - id: category-service_route
+          uri: lb://category-service
+          predicates:
+            - Path=/admin/categories, /categories
         - id: main-service_route
           uri: lb://main-service
           predicates:
             - Path=/**
+
 
 
 server:

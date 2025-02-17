@@ -1,11 +1,11 @@
-package ewm.user.service;
+package ewm.service;
 
 import ewm.error.exception.ExistException;
 import ewm.error.exception.NotFoundException;
 import ewm.dto.user.UserDto;
-import ewm.user.mapper.UserMapper;
+import ewm.mapper.UserMapper;
 import ewm.model.User;
-import ewm.user.repository.UserRepository;
+import ewm.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;

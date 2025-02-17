@@ -1,4 +1,4 @@
-package ewm.category.repository;
+package ewm.repository;
 
 import ewm.model.Category;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -1,15 +1,14 @@
-package ewm.category.service;
+package ewm.service;
 
 import ewm.dto.category.CategoryDto;
 import ewm.dto.category.CreateCategoryDto;
-import ewm.category.mapper.CategoryMapper;
+
+import ewm.mapper.CategoryMapper;
 import ewm.model.Category;
-import ewm.category.repository.CategoryRepository;
-import ewm.error.exception.ConflictException;
+import ewm.repository.CategoryRepository;
 import ewm.error.exception.ExistException;
 import ewm.error.exception.NotFoundException;
-import ewm.event.EventRepository;
-import ewm.model.Event;
+//import ewm.event.EventRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.PageRequest;
@@ -26,7 +25,7 @@ public class CategoryServiceImpl implements CategoryService {
     private static final String CATEGORY_NAME_EXIST = "Category with this name already exist";
 
     private final CategoryRepository categoryRepository;
-    private final EventRepository eventRepository;
+//    private final EventRepository eventRepository;
 
 
     @Override
@@ -76,8 +75,8 @@ public class CategoryServiceImpl implements CategoryService {
         if (category.isEmpty()) {
             throw new NotFoundException(CATEGORY_NOT_FOUND);
         }
-        List<Event> events = eventRepository.findByCategoryId(id);
-        if (!events.isEmpty()) throw new ConflictException("Есть привязанные события.");
+//        List<Event> events = eventRepository.findByCategoryId(id);
+//        if (!events.isEmpty()) throw new ConflictException("Есть привязанные события.");
         categoryRepository.deleteById(id);
     }
 }

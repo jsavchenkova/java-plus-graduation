@@ -1,4 +1,4 @@
-package ewm.user.mapper;
+package ewm.mapper;
 
 import ewm.dto.user.UserDto;
 import ewm.model.User;

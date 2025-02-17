@@ -1,4 +1,4 @@
-package ewm.category.service;
+package ewm.service;
 
 import ewm.dto.category.CategoryDto;
 import ewm.dto.category.CreateCategoryDto;

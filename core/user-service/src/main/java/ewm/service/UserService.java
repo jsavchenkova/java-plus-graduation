@@ -1,4 +1,4 @@
-package ewm.user.service;
+package ewm.service;
 
 import ewm.dto.user.UserDto;
 

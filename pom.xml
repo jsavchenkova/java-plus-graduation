@@ -26,7 +26,7 @@
 		<module>core</module>
 		<module>stats</module>
 		<module>infra</module>
-	</modules>
+    </modules>
 
 	<build>
 		<pluginManagement>

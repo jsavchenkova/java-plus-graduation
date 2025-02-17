@@ -1,7 +1,7 @@
-package ewm.category.controller;
+package ewm.controller;
 
 import ewm.dto.category.CategoryDto;
-import ewm.category.service.CategoryService;
+import ewm.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

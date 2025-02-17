@@ -1,8 +1,8 @@
-package ewm.user.controller.admin;
+package ewm.controller;
 
 import ewm.client.UserAdminClient;
 import ewm.dto.user.UserDto;
-import ewm.user.service.UserService;
+import ewm.service.UserService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
