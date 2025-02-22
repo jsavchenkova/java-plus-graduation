@@ -121,5 +121,6 @@ services:
       interval: 10s
       retries: 15
 
+
 networks:
   ewm-net:
