@@ -25,4 +25,7 @@ public interface UserAdminClient {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{userId}")
     void deleteUser(@PathVariable Long userId);
+
+    @GetMapping("/{userId}")
+    UserDto getUserById(@PathVariable Long userId);
 }

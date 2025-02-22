@@ -49,9 +49,17 @@ public class UserServiceImpl implements UserService {
 		log.info("Удален user с id --> {}", userId);
 	}
 
+	public UserDto getUserById(Long userId){
+		Optional<User> user = userRepository.findById(userId);
+		if (user.isEmpty()) throw new NotFoundException("Пользователя с id = " + userId.toString() + " не существует");
+		return UserMapper.mapToUserDto(user.get());
+	}
+
 	private User getUserFromRepo(Long userId) {
 		Optional<User> user = userRepository.findById(userId);
 		if (user.isEmpty()) throw new NotFoundException("Пользователя с id = " + userId.toString() + " не существует");
 		return user.get();
 	}
+
+
 }

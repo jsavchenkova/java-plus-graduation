@@ -43,4 +43,10 @@ public class UserController implements UserAdminClient {
 		log.info("Удалить пользователя по userId --> {}", userId);
 		userService.deleteUser(userId);
 	}
+
+	@GetMapping("/{userId}")
+	public UserDto getUserById(@PathVariable Long userId){
+		log.info("Получить пользователя по id");
+		return userService.getUserById(userId);
+	}
 }

@@ -1,5 +1,7 @@
 package ewm.event.service;
 
+import ewm.client.UserAdminClient;
+import ewm.dto.user.UserDto;
 import ewm.event.repository.EventRepository;
 import ewm.model.Category;
 //import ewm.category.repository.CategoryRepository;
@@ -22,7 +24,6 @@ import ewm.dto.request.RequestDto;
 import ewm.model.Request;
 import ewm.model.RequestStatus;
 //import ewm.request.repository.RequestRepository;
-import ewm.model.User;
 //import ewm.user.repository.UserRepository;
 import ewm.statistics.service.StatisticsService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -43,6 +44,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class EventServiceImpl implements EventService {
     private static final String EVENT_NOT_FOUND_MESSAGE = "Event not found";
+    private final UserAdminClient userAdminClient;
 
     @Autowired
     private EventRepository repository;
@@ -55,7 +57,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public List<EventDto> getEvents(Long userId, Integer from, Integer size) {
-        getUser(userId);
+        userAdminClient.getUserById(userId);
         Pageable pageable = PageRequest.of(from, size);
         return repository.findByInitiatorId(userId, pageable).stream()
                 .map(this::eventToDto)
@@ -64,7 +66,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public EventDto getEventById(Long userId, Long id, String ip, String uri) {
-        getUser(userId);
+        userAdminClient.getUserById(userId);
         Optional<Event> event = repository.findByIdAndInitiatorId(id, userId);
         if (event.isEmpty()) {
             throw new NotFoundException(EVENT_NOT_FOUND_MESSAGE);
@@ -74,7 +76,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public EventDto createEvent(Long userId, CreateEventDto eventDto) {
-        User user = getUser(userId);
+        UserDto user = userAdminClient.getUserById(userId);
         Category category = getCategory(eventDto.getCategory());
         Event event = EventMapper.mapCreateDtoToEvent(eventDto);
         if (event.getPaid() == null) {
@@ -87,7 +89,7 @@ public class EventServiceImpl implements EventService {
             event.setRequestModeration(true);
         }
 
-        event.setInitiator(user);
+        event.setInitiatorId(userId);
         event.setCategory(category);
         event.setState(EventState.PENDING);
         Event newEvent = repository.save(event);
@@ -96,7 +98,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public EventDto updateEvent(Long userId, UpdateEventDto eventDto, Long eventId) {
-        getUser(userId);
+        userAdminClient.getUserById(userId);
         Optional<Event> eventOptional = repository.findById(eventId);
         if (eventOptional.isEmpty()) {
             throw new NotFoundException(EVENT_NOT_FOUND_MESSAGE);
@@ -164,7 +166,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public List<RequestDto> getEventRequests(Long userId, Long eventId) {
-//        getUser(userId);
+        userAdminClient.getUserById(userId);
 //        getEvent(eventId);
 //        return RequestMapper.INSTANCE.mapListRequests(requestRepository.findAllByEvent_id(eventId));
         return null;
@@ -173,7 +175,7 @@ public class EventServiceImpl implements EventService {
     @Override
     public EventRequestStatusUpdateResult changeStatusEventRequests(Long userId, Long eventId,
                                                                     EventRequestStatusUpdateRequest request) {
-        getUser(userId);
+        userAdminClient.getUserById(userId);
         Event event = getEvent(eventId);
         EventRequestStatusUpdateResult response = new EventRequestStatusUpdateResult();
 //        List<Request> requests = requestRepository.findAllById(request.getRequestIds());
@@ -283,14 +285,6 @@ public class EventServiceImpl implements EventService {
             throw new ConflictException("Дата начала события меньше чем час " + dateTime);
     }
 
-    private User getUser(Long userId) {
-//        Optional<User> user = userRepository.findById(userId);
-//        if (user.isEmpty()) {
-//            throw new NotFoundException("Пользователь не найден");
-//        }
-//        return user.get();
-        return null;
-    }
 
     private Category getCategory(Long categoryId) {
 //        Optional<Category> category = categoryRepository.findById(categoryId);

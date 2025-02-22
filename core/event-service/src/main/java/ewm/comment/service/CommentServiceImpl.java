@@ -10,7 +10,7 @@ import ewm.error.exception.ConflictException;
 import ewm.error.exception.NotFoundException;
 
 import ewm.model.Event;
-import ewm.model.User;
+//import ewm.model.User;
 //import ewm.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +35,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     @Transactional
     public CommentDto addComment(Long userId, Long eventId, CreateCommentDto createCommentDto) {
-        User user = getUserById(userId);
+//        User user = getUserById(userId);
         Event event = getEventById(eventId);
 
         Comment comment = Comment.builder()
@@ -56,7 +56,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public List<CommentDto> getEventCommentsByUserId(Long userId, Long eventId) {
-        getUserById(userId);
+//        getUserById(userId);
         getEventById(eventId);
         return commentRepository.findAllByEventIdAndAuthorId(eventId, userId)
                 .stream()
@@ -78,7 +78,7 @@ public class CommentServiceImpl implements CommentService {
     public CommentDto updateComment(Long userId, Long eventId, Long commentId, CreateCommentDto createCommentDto) {
         getEventById(eventId);
         Comment comment = getCommentById(commentId);
-        User user = getUserById(userId);
+//        User user = getUserById(userId);
 //        if (!Objects.equals(comment.getAuthor().getId(), user.getId())) {
 //            throw new ConflictException("This user can't update comment");
 //        }
@@ -91,21 +91,21 @@ public class CommentServiceImpl implements CommentService {
     public void deleteComment(Long userId, Long eventId, Long commentId) {
         getEventById(eventId);
         Comment comment = getCommentById(commentId);
-        User user = getUserById(userId);
+//        User user = getUserById(userId);
 //        if (!Objects.equals(comment.getAuthor().getId(), user.getId())) {
 //            throw new ConflictException("This user can't delete comment");
 //        }
         commentRepository.deleteById(commentId);
     }
 
-    private User getUserById(Long userId) {
+//    private User getUserById(Long userId) {
 //        Optional<User> optionalUser = userRepository.findById(userId);
 //        if (optionalUser.isEmpty()) {
 //            throw new NotFoundException("User not found");
 //        }
 //        return optionalUser.get();
-        return null;
-    }
+//        return null;
+//    }
 
     private Event getEventById(Long eventId) {
         Optional<Event> optionalEvent = eventRepository.findById(eventId);
