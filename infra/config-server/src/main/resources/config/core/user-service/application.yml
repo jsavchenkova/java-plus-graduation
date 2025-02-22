@@ -1,17 +1,19 @@
 server:
   port: 0
-  spring:
-    jpa:
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
       hibernate:
-        ddl-auto: create
-      properties:
-        hibernate:
-          format_sql: true
-    sql:
-      init:
-        mode: always
-    datasource:
-      driverClassName: org.postgresql.Driver
-      url: jdbc:postgresql://localhost:5433/ewm_main
-      username: test
-      password: test
+        format_sql: true
+        show_sql: true
+        default_schema: ewm_user
+  sql:
+    init:
+      mode: always
+  datasource:
+    driverClassName: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5433/ewm_main
+    username: test
+    password: test

@@ -33,7 +33,7 @@ public class Comment {
     @JoinColumn(name = "event_id", nullable = false)
     private Event event;
 
-    @ManyToOne
-    @JoinColumn(name = "author_id", nullable = false)
-    private User author;
+//    @ManyToOne
+//    @JoinColumn(name = "author_id", nullable = false)
+//    private User author;
 }
