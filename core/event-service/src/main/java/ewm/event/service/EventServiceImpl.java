@@ -45,9 +45,7 @@ import java.util.stream.Collectors;
 public class EventServiceImpl implements EventService {
     private static final String EVENT_NOT_FOUND_MESSAGE = "Event not found";
     private final UserAdminClient userAdminClient;
-
-    @Autowired
-    private EventRepository repository;
+    private final EventRepository repository;
 //    private final CategoryRepository categoryRepository;
     @Autowired
     private StatisticsService statisticsService;

@@ -34,8 +34,8 @@ public class Event {
 	@JoinColumn(name = "category_id")
 	private Category category;
 
-	@ManyToOne
-	@JoinColumn(name = "user_id")
+//	@ManyToOne
+//	@JoinColumn(name = "user_id")
 	private Long initiatorId;
 
 	private Double lat;

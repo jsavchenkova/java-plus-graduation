@@ -35,5 +35,6 @@ public class Comment {
 
 //    @ManyToOne
 //    @JoinColumn(name = "author_id", nullable = false)
-//    private User author;
+    @Column(name = "author_id")
+    private Long authorId;
 }

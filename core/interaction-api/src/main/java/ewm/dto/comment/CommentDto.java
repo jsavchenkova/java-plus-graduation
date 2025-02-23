@@ -1,5 +1,6 @@
 package ewm.dto.comment;
 
+import ewm.dto.user.UserDto;
 import lombok.Data;
 
 
@@ -7,5 +8,5 @@ import lombok.Data;
 public class CommentDto {
     private Long id;
     private String content;
-  //  private User author;
+    private UserDto author;
 }

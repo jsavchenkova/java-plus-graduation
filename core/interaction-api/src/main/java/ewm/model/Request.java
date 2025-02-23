@@ -26,8 +26,8 @@ public class Request {
 	@JoinColumn(name = "event_id")
 	private Event event;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "requester_id")
+//	@ManyToOne(fetch = FetchType.LAZY)
+//	@JoinColumn(name = "requester_id")
 	private Long requester;
 
 	private RequestStatus status;
