@@ -48,7 +48,6 @@ public class EventServiceImpl implements EventService {
 
     @Autowired
     private EventRepository repository;
-//    private final UserRepository userRepository;
 //    private final CategoryRepository categoryRepository;
     @Autowired
     private StatisticsService statisticsService;
@@ -57,21 +56,25 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public List<EventDto> getEvents(Long userId, Integer from, Integer size) {
-        userAdminClient.getUserById(userId);
+        UserDto userDto = userAdminClient.getUserById(userId);
         Pageable pageable = PageRequest.of(from, size);
-        return repository.findByInitiatorId(userId, pageable).stream()
+        List<EventDto> eventDtoList = repository.findByInitiatorId(userId, pageable).stream()
                 .map(this::eventToDto)
                 .toList();
+        eventDtoList.stream().forEach(x -> x.setInitiator(userDto));
+        return eventDtoList;
     }
 
     @Override
     public EventDto getEventById(Long userId, Long id, String ip, String uri) {
-        userAdminClient.getUserById(userId);
+        UserDto userDto = userAdminClient.getUserById(userId);
         Optional<Event> event = repository.findByIdAndInitiatorId(id, userId);
         if (event.isEmpty()) {
             throw new NotFoundException(EVENT_NOT_FOUND_MESSAGE);
         }
-        return eventToDto(event.get());
+        EventDto dto = eventToDto(event.get());
+        dto.setInitiator(userDto);
+        return dto;
     }
 
     @Override
@@ -93,12 +96,14 @@ public class EventServiceImpl implements EventService {
         event.setCategory(category);
         event.setState(EventState.PENDING);
         Event newEvent = repository.save(event);
-        return eventToDto(newEvent);
+        EventDto dto =  eventToDto(newEvent);
+        dto.setInitiator(user);
+        return dto;
     }
 
     @Override
     public EventDto updateEvent(Long userId, UpdateEventDto eventDto, Long eventId) {
-        userAdminClient.getUserById(userId);
+        UserDto userDto = userAdminClient.getUserById(userId);
         Optional<Event> eventOptional = repository.findById(eventId);
         if (eventOptional.isEmpty()) {
             throw new NotFoundException(EVENT_NOT_FOUND_MESSAGE);
@@ -109,7 +114,9 @@ public class EventServiceImpl implements EventService {
         }
         updateEventFields(eventDto, foundEvent);
         Event saved = repository.save(foundEvent);
-        return eventToDto(saved);
+        EventDto dto = eventToDto(saved);
+        dto.setInitiator(userDto);
+        return dto;
     }
 
     @Override
@@ -146,6 +153,7 @@ public class EventServiceImpl implements EventService {
                     .stream()
                     .peek(event -> event.setViews(views.get(event.getId())));
             events = repository.saveAll(events);
+
         }
         return EventMapper.mapToEventDto(events);
     }
@@ -167,7 +175,7 @@ public class EventServiceImpl implements EventService {
     @Override
     public List<RequestDto> getEventRequests(Long userId, Long eventId) {
         userAdminClient.getUserById(userId);
-//        getEvent(eventId);
+        getEvent(eventId);
 //        return RequestMapper.INSTANCE.mapListRequests(requestRepository.findAllByEvent_id(eventId));
         return null;
     }
