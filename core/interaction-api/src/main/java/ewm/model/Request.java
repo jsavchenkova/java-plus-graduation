@@ -22,13 +22,13 @@ public class Request {
 
 	private LocalDateTime created;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "event_id")
-	private Event event;
+//	@ManyToOne(fetch = FetchType.LAZY)
+	@Column(name = "event_id")
+	private Long eventId;
 
 //	@ManyToOne(fetch = FetchType.LAZY)
-//	@JoinColumn(name = "requester_id")
-	private Long requester;
+	@Column(name = "requester_id")
+	private Long requesterId;
 
 	private RequestStatus status;
 }

@@ -26,16 +26,16 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class RequestServiceImpl implements RequestService {
-    @Autowired
-    private  RequestRepository requestRepository;
-    @Autowired
+
+    private final  RequestRepository requestRepository;
+//    @Autowired
 //    private  EventRepository eventRepository;
 //    private final UserRepository userRepository;
 
     @Override
     public List<RequestDto> getRequests(Long userId) {
 //        getUser(userId);
-        return RequestMapper.INSTANCE.mapListRequests(requestRepository.findAllByRequester_Id(userId));
+        return RequestMapper.INSTANCE.mapListRequests(requestRepository.findAllByRequesterId(userId));
     }
 
     @Transactional
@@ -45,12 +45,12 @@ public class RequestServiceImpl implements RequestService {
 //        User user = getUser(userId);
         checkRequest(userId, event);
         Request request = Request.builder()
-                .requester(userId)
+                .requesterId(userId)
                 .created(LocalDateTime.now())
                 .status(!event.getRequestModeration()
                         || event.getParticipantLimit() == 0
                         ? RequestStatus.CONFIRMED : RequestStatus.PENDING)
-                .event(event)
+                .eventId(eventId)
                 .build();
         request = requestRepository.save(request);
         if (!event.getRequestModeration() || event.getParticipantLimit() == 0) {
@@ -65,18 +65,18 @@ public class RequestServiceImpl implements RequestService {
     public RequestDto cancelRequest(Long userId, Long requestId) {
 //        getUser(userId);
         Request request = getRequest(requestId);
-        if (!request.getRequester().equals(userId))
+        if (!request.getRequesterId().equals(userId))
             throw new ConflictException("Другой пользователь не может отменить запрос");
         request.setStatus(RequestStatus.CANCELED);
         requestRepository.save(request);
-        Event event = getEvent(request.getEvent().getId());
+        Event event = getEvent(request.getEventId());
         event.setConfirmedRequests(event.getConfirmedRequests() - 1);
 //        eventRepository.save(event);
         return RequestMapper.INSTANCE.mapToRequestDto(request);
     }
 
     private void checkRequest(Long userId, Event event) {
-        if (!requestRepository.findAllByRequester_IdAndEvent_id(userId, event.getId()).isEmpty())
+        if (!requestRepository.findAllByRequesterIdAndEventId(userId, event.getId()).isEmpty())
             throw new ConflictException("нельзя добавить повторный запрос");
         if (event.getInitiatorId().equals(userId))
             throw new ConflictException("инициатор события не может добавить запрос на участие в своём событии");
