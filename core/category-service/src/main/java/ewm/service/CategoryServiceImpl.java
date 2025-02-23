@@ -1,5 +1,6 @@
 package ewm.service;
 
+import ewm.client.EventAdminClient;
 import ewm.dto.category.CategoryDto;
 import ewm.dto.category.CreateCategoryDto;
 
@@ -25,6 +26,7 @@ public class CategoryServiceImpl implements CategoryService {
     private static final String CATEGORY_NAME_EXIST = "Category with this name already exist";
 
     private final CategoryRepository categoryRepository;
+    private final EventAdminClient eventAdminClient;
 //    private final EventRepository eventRepository;
 
 

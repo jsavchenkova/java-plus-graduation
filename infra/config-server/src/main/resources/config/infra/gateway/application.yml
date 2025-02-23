@@ -11,10 +11,10 @@ spring:
           uri: lb://category-service
           predicates:
             - Path=/admin/categories, /categories
-        - id: main-service_route
-          uri: lb://main-service
+        - id: event-service_route
+          uri: lb://event-service
           predicates:
-            - Path=/**
+            - Path=/users/**/comments, /events/**/comments, /admin/compilations, /compilations, /admin/events,  /events, /users/**/events
 
 
 

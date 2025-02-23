@@ -14,8 +14,6 @@ import ewm.error.exception.NotFoundException;
 import ewm.model.Event;
 //import ewm.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
