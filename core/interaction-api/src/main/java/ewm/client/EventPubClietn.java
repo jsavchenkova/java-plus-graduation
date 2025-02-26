@@ -18,4 +18,7 @@ public interface EventPubClietn {
     @GetMapping("/{id}")
     EventDto publicGetEvent(@PathVariable Long id,
                             HttpServletRequest request);
+
+    @GetMapping("/category/{id}")
+    List<EventDto> findByCategoryId(@PathVariable Long id);
 }

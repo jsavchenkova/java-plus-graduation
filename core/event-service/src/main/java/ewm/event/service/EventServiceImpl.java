@@ -45,6 +45,14 @@ import java.util.stream.Collectors;
 public class EventServiceImpl implements EventService {
     private static final String EVENT_NOT_FOUND_MESSAGE = "Event not found";
     private final UserAdminClient userAdminClient;
+
+    @Override
+    public List<EventDto> getByCategoryId(Long categoryId) {
+        return repository.findByCategoryId(categoryId).stream()
+                .map(this::eventToDto)
+                .toList();
+    }
+
     private final EventRepository repository;
 //    private final CategoryRepository categoryRepository;
     @Autowired

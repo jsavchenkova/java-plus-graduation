@@ -27,16 +27,16 @@ public class AdminEventController implements EventAdminClient {
 
 	@GetMapping
 	public List<EventDto> adminGetEvents(AdminGetEventRequestDto requestParams) {
-//		log.info("Получить события, согласно устловиям -> {}", requestParams);
+		log.info("Получить события, согласно устловиям -> {}", requestParams);
 		return eventService.adminGetEvents(requestParams);
 	}
 
 	@PatchMapping("/{eventId}")
 	public EventDto adminChangeEvent(@PathVariable Long eventId,
 									 @RequestBody @Valid UpdateEventDto eventDto) {
-//		log.info("Изменить событие eventId = {}, поля -> {}", eventId, eventDto);
-//		EventValidate.updateEventDateValidate(eventDto, log);
-//		EventValidate.textLengthValidate(eventDto, log);
+		log.info("Изменить событие eventId = {}, поля -> {}", eventId, eventDto);
+		EventValidate.updateEventDateValidate(eventDto, log);
+		EventValidate.textLengthValidate(eventDto, log);
 		return eventService.adminChangeEvent(eventId, eventDto);
 	}
 }

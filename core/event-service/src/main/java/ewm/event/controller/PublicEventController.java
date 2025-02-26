@@ -37,4 +37,9 @@ public class PublicEventController implements EventPubClietn {
 								   HttpServletRequest request) {
 		return eventService.publicGetEvent(id, request);
 	}
+
+	@Override
+	public List<EventDto> findByCategoryId(Long id) {
+		return eventService.getByCategoryId(id);
+	}
 }

@@ -6,7 +6,7 @@ spring:
         - id: user-service_route
           uri: lb://user-service
           predicates:
-            - Path=/admin/users
+            - Path=/admin/users, /admin/users/**
         - id: category-service_route
           uri: lb://category-service
           predicates:
@@ -14,7 +14,7 @@ spring:
         - id: event-service_route
           uri: lb://event-service
           predicates:
-            - Path=/users/**/comments, /events/**/comments, /admin/compilations, /compilations, /admin/events,  /events, /users/**/events
+            - Path=/admin/events, /users, /events, /admin/compilations, /compilations
 
 
 
