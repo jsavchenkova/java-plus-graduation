@@ -1,6 +1,5 @@
 package ewm.compilation.controller.admin;
 
-import ewm.client.CompilationAdminClient;
 import ewm.dto.compilation.CompilationDto;
 import ewm.dto.compilation.CompilationDtoResponse;
 import ewm.dto.compilation.CompilationDtoUpdate;
@@ -17,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RequiredArgsConstructor
 @RequestMapping("admin/compilations")
-public class CompilationAdminController implements CompilationAdminClient {
+public class CompilationAdminController {
 	private final CompilationService compilationService;
 
 	@ResponseStatus(HttpStatus.CREATED)

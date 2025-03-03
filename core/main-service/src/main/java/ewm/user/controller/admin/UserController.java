@@ -1,6 +1,5 @@
 package ewm.user.controller.admin;
 
-import ewm.client.UserAdminClient;
 import ewm.dto.user.UserDto;
 import ewm.user.service.UserService;
 import jakarta.validation.Valid;
@@ -19,7 +18,7 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @RequestMapping("admin/users")
-public class UserController implements UserAdminClient {
+public class UserController {
 	private final UserService userService;
 
 	@GetMapping

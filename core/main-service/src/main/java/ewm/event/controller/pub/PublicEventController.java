@@ -1,7 +1,6 @@
 package ewm.event.controller.pub;
 
 import ewm.event.EventService;
-import ewm.client.EventPubClietn;
 import ewm.dto.event.EventDto;
 import ewm.dto.event.PublicGetEventRequestDto;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,7 +19,7 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @RequestMapping("events")
-public class PublicEventController implements EventPubClietn {
+public class PublicEventController {
 	private final EventService eventService;
 
 	@GetMapping

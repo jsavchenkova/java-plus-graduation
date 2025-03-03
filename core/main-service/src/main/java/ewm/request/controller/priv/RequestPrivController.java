@@ -1,6 +1,5 @@
 package ewm.request.controller.priv;
 
-import ewm.client.RequestPrivClient;
 import ewm.dto.request.RequestDto;
 import ewm.request.service.RequestService;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +15,7 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @RequestMapping("users/{userId}/requests")
-public class RequestPrivController implements RequestPrivClient {
+public class RequestPrivController  {
 	private final RequestService requestService;
 
 	@GetMapping

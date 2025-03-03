@@ -1,6 +1,5 @@
 package ewm.comment.controller;
 
-import ewm.client.CommentClient;
 import ewm.dto.comment.CommentDto;
 import ewm.dto.comment.CreateCommentDto;
 import ewm.comment.service.CommentService;
@@ -13,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-public class CommentController implements CommentClient {
+public class CommentController {
     private static final String PRIVATE_PATH = "/users/{userId}/events/{eventId}/comments";
     private static final String PUBLIC_PATH = "/events/{eventId}/comments";
 
