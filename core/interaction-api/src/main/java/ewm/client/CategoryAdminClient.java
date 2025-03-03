@@ -7,7 +7,8 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-@FeignClient(name = "category-admin-client")
+@FeignClient(name = "category-service", contextId = "CategoryAdminClient")
+@RequestMapping("admin/categories")
 public interface CategoryAdminClient {
 
     @PostMapping

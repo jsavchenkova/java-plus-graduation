@@ -1,5 +1,6 @@
 package ewm.dto.event;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import ewm.dto.category.CategoryDto;
 import lombok.Builder;
@@ -10,6 +11,7 @@ import java.time.LocalDateTime;
 
 @Data
 @Builder
+@JsonAutoDetect
 public class EventDto {
 	private Long id;
 	private String annotation;

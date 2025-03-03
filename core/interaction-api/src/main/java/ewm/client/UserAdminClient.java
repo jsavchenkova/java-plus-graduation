@@ -10,22 +10,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@FeignClient(name = "user-admin-client")
-public interface UserAdminClient {
+@FeignClient(name = "user-service", path="/user")
+public interface UserAdminClient extends UserOperations {
 
-    @GetMapping
-    List<UserDto> getUsers(@RequestParam(required = false) List<Long> ids,
-                           @PositiveOrZero @RequestParam(name = "from", defaultValue = "0") Integer from,
-                           @Positive @RequestParam(name = "size", defaultValue = "10") Integer size);
 
-    @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping
-    UserDto createUser(@RequestBody @Valid UserDto userDto);
-
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    @DeleteMapping("/{userId}")
-    void deleteUser(@PathVariable Long userId);
-
-    @GetMapping("/{userId}")
-    UserDto getUserById(@PathVariable Long userId);
 }

@@ -1,5 +1,6 @@
 package ewm.dto.event;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AllArgsConstructor;
@@ -31,6 +32,7 @@ public class PublicGetEventRequestDto {
     private LocalDateTime rangeEnd;
 
     private Boolean onlyAvailable;
+
 
     private EventSort sort;
 

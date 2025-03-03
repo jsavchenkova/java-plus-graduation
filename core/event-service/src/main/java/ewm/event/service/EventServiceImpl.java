@@ -1,6 +1,10 @@
 package ewm.event.service;
 
+import ewm.client.CategoryClient;
+import ewm.client.RequestClient;
+import ewm.client.RequestPrivClient;
 import ewm.client.UserAdminClient;
+import ewm.dto.category.CategoryDto;
 import ewm.dto.user.UserDto;
 import ewm.event.repository.EventRepository;
 import ewm.model.Category;
@@ -45,6 +49,9 @@ import java.util.stream.Collectors;
 public class EventServiceImpl implements EventService {
     private static final String EVENT_NOT_FOUND_MESSAGE = "Event not found";
     private final UserAdminClient userAdminClient;
+    private final CategoryClient categoryClient;
+//    private final RequestPrivClient requestPrivClient;
+    private final RequestClient requestClient;
 
     @Override
     public List<EventDto> getByCategoryId(Long categoryId) {
@@ -86,7 +93,7 @@ public class EventServiceImpl implements EventService {
     @Override
     public EventDto createEvent(Long userId, CreateEventDto eventDto) {
         UserDto user = userAdminClient.getUserById(userId);
-        Category category = getCategory(eventDto.getCategory());
+        CategoryDto category = categoryClient.getCategory(eventDto.getCategory());
         Event event = EventMapper.mapCreateDtoToEvent(eventDto);
         if (event.getPaid() == null) {
             event.setPaid(false);
@@ -99,10 +106,11 @@ public class EventServiceImpl implements EventService {
         }
 
         event.setInitiatorId(userId);
-        event.setCategory(category);
+        event.setCategoryId(category.getId());
         event.setState(EventState.PENDING);
         Event newEvent = repository.save(event);
         EventDto dto =  eventToDto(newEvent);
+        dto.setCategory(category);
         dto.setInitiator(user);
         return dto;
     }
@@ -126,8 +134,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<EventDto> publicGetEvents(PublicGetEventRequestDto requestParams,
-                                          HttpServletRequest request) {
+    public List<EventDto> publicGetEvents(PublicGetEventRequestDto requestParams) {
         LocalDateTime start = (requestParams.getRangeStart() == null) ?
                 LocalDateTime.now() : requestParams.getRangeStart();
         LocalDateTime end = (requestParams.getRangeEnd() == null) ?
@@ -147,17 +154,17 @@ public class EventServiceImpl implements EventService {
                         requestParams.getSize())
         );
 
-        statisticsService.saveStats(request);
+//        statisticsService.saveStats(request);
         if (!events.isEmpty()) {
             LocalDateTime oldestEventPublishedOn = events.stream()
                     .min(Comparator.comparing(Event::getPublishedOn)).map(Event::getPublishedOn).stream()
                     .findFirst().orElseThrow();
-            List<String> uris = getListOfUri(events, request.getRequestURI());
+//            List<String> uris = getListOfUri(events, request.getRequestURI());
 
-            Map<Long, Long> views = statisticsService.getStats(oldestEventPublishedOn, LocalDateTime.now(), uris);
-            events
-                    .stream()
-                    .peek(event -> event.setViews(views.get(event.getId())));
+//            Map<Long, Long> views = statisticsService.getStats(oldestEventPublishedOn, LocalDateTime.now(), uris);
+//            events
+//                    .stream()
+//                    .peek(event -> event.setViews(views.get(event.getId())));
             events = repository.saveAll(events);
 
         }
@@ -165,15 +172,15 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public EventDto publicGetEvent(Long id, HttpServletRequest request) {
+    public EventDto publicGetEvent(Long id) {
         Event event = getEvent(id);
         if (event.getState() != EventState.PUBLISHED) {
             throw new NotFoundException("Событие не найдено");
         }
-        statisticsService.saveStats(request);
-        Long views = statisticsService.getStats(
-                event.getPublishedOn(), LocalDateTime.now(), List.of(request.getRequestURI())).get(id);
-        event.setViews(views);
+////        statisticsService.saveStats(request);
+//        Long views = statisticsService.getStats(
+//                event.getPublishedOn(), LocalDateTime.now(), List.of(request.getRequestURI())).get(id);
+//        event.setViews(views);
         event = repository.save(event);
         return EventMapper.mapEventToEventDto(event);
     }
@@ -182,8 +189,8 @@ public class EventServiceImpl implements EventService {
     public List<RequestDto> getEventRequests(Long userId, Long eventId) {
         userAdminClient.getUserById(userId);
         getEvent(eventId);
-//        return RequestMapper.INSTANCE.mapListRequests(requestRepository.findAllByEvent_id(eventId));
-        return null;
+  //      requestPrivClient.getRequests(userId);
+        return requestClient.findAllByEventId(eventId);
     }
 
     @Override
@@ -192,6 +199,7 @@ public class EventServiceImpl implements EventService {
         userAdminClient.getUserById(userId);
         Event event = getEvent(eventId);
         EventRequestStatusUpdateResult response = new EventRequestStatusUpdateResult();
+
 //        List<Request> requests = requestRepository.findAllById(request.getRequestIds());
         if (request.getStatus().equals(RequestStatus.REJECTED)) {
 //            checkRequestsStatus(requests);
@@ -234,6 +242,8 @@ public class EventServiceImpl implements EventService {
         checkEventForUpdate(event, eventDto.getStateAction());
         Event updatedEvent = repository.save(prepareEventForUpdate(event, eventDto));
         EventDto result = EventMapper.mapEventToEventDto(updatedEvent);
+        result.setCategory(categoryClient.getCategory(event.getCategoryId()));
+        result.setInitiator(userAdminClient.getUserById(event.getInitiatorId()));
         return result;
     }
 
@@ -313,7 +323,7 @@ public class EventServiceImpl implements EventService {
     private void updateEventFields(UpdateEventDto eventDto, Event foundEvent) {
         if (eventDto.getCategory() != null) {
             Category category = getCategory(eventDto.getCategory());
-            foundEvent.setCategory(category);
+            foundEvent.setCategoryId(category.getId());
         }
 
         if (eventDto.getAnnotation() != null && !eventDto.getAnnotation().isBlank()) {

@@ -19,7 +19,7 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @RequestMapping("admin/users")
-public class UserController implements UserAdminClient {
+public class UserController  {
 	private final UserService userService;
 
 	@GetMapping

@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("admin/categories")
-public class CategoryAdminController implements CategoryAdminClient {
+public class CategoryAdminController {
     private final CategoryService categoryService;
 
     @PostMapping

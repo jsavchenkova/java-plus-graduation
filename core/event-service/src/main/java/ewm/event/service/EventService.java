@@ -19,9 +19,9 @@ public interface EventService {
 
 	EventDto updateEvent(Long userId, UpdateEventDto eventDto, Long eventId);
 
-	List<EventDto> publicGetEvents(PublicGetEventRequestDto requestParams, HttpServletRequest request);
+	List<EventDto> publicGetEvents(PublicGetEventRequestDto requestParams);
 
-	EventDto publicGetEvent(Long eventId, HttpServletRequest request);
+	EventDto publicGetEvent(Long eventId);
 
 	List<RequestDto> getEventRequests(Long userId, Long eventId);
 

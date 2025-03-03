@@ -30,9 +30,9 @@ public class Event {
 	private EventState state;
 	private String title;
 
-	@ManyToOne
-	@JoinColumn(name = "category_id")
-	private Category category;
+//	@ManyToOne
+//	@JoinColumn(name = "category_id")
+	private Long categoryId;
 
 //	@ManyToOne
 //	@JoinColumn(name = "user_id")

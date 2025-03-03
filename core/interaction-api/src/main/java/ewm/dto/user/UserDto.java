@@ -1,5 +1,6 @@
 package ewm.dto.user;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;

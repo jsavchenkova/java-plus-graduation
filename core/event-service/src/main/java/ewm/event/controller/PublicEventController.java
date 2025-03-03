@@ -1,7 +1,6 @@
 package ewm.event.controller;
 
 
-import ewm.client.EventPubClietn;
 import ewm.dto.event.EventDto;
 import ewm.dto.event.PublicGetEventRequestDto;
 import ewm.event.service.EventService;
@@ -14,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -22,23 +22,22 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @RequestMapping("events")
-public class PublicEventController implements EventPubClietn {
+public class PublicEventController {
 	@Autowired
 	private EventService eventService;
 
-	@GetMapping
-	public List<EventDto> publicGetEvents(HttpServletRequest request, PublicGetEventRequestDto requestParams) {
-//		log.info("Получить события, согласно устловиям -> {}", requestParams);
-		return eventService.publicGetEvents(requestParams, request);
+@GetMapping
+	public List<EventDto> publicGetEvents(@RequestParam  PublicGetEventRequestDto requestParams) {
+		log.info("Получить события, согласно устловиям -> {}", requestParams);
+		return eventService.publicGetEvents(requestParams);
 	}
 
 	@GetMapping("/{id}")
-	public EventDto publicGetEvent(@PathVariable Long id,
-								   HttpServletRequest request) {
-		return eventService.publicGetEvent(id, request);
+	public EventDto publicGetEvent(@PathVariable Long id) {
+		return eventService.publicGetEvent(id);
 	}
 
-	@Override
+
 	public List<EventDto> findByCategoryId(Long id) {
 		return eventService.getByCategoryId(id);
 	}

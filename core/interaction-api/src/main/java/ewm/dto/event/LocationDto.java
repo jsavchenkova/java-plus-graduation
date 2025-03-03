@@ -1,5 +1,6 @@
 package ewm.dto.event;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import lombok.Builder;
 import lombok.Data;
 

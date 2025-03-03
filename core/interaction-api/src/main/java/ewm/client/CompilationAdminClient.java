@@ -8,7 +8,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-@FeignClient(name = "compilation-admin-client")
+@FeignClient(name = "event-service", contextId = "CompilationAdminClient")
 public interface CompilationAdminClient {
 
     @ResponseStatus(HttpStatus.CREATED)

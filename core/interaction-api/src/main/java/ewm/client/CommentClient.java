@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@FeignClient(name = "comment-client")
+@FeignClient(name = "event-service", contextId = "CommentClient")
 public interface CommentClient {
     String PRIVATE_PATH = "/users/{userId}/events/{eventId}/comments";
     String PUBLIC_PATH = "/events/{eventId}/comments";

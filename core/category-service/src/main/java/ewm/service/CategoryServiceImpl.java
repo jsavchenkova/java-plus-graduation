@@ -1,6 +1,5 @@
 package ewm.service;
 
-import ewm.client.EventPubClietn;
 import ewm.dto.category.CategoryDto;
 import ewm.dto.category.CreateCategoryDto;
 
@@ -27,7 +26,6 @@ public class CategoryServiceImpl implements CategoryService {
     private static final String CATEGORY_NAME_EXIST = "Category with this name already exist";
 
     private final CategoryRepository categoryRepository;
-    private final EventPubClietn eventPubClietn;
 
 
     @Override
@@ -77,8 +75,8 @@ public class CategoryServiceImpl implements CategoryService {
         if (category.isEmpty()) {
             throw new NotFoundException(CATEGORY_NOT_FOUND);
         }
-        List<EventDto> events = eventPubClietn.findByCategoryId(id);
-        if (!events.isEmpty()) throw new ConflictException("Есть привязанные события.");
-        categoryRepository.deleteById(id);
+//        List<EventDto> events = eventPubClietn.findByCategoryId(id);
+//        if (!events.isEmpty()) throw new ConflictException("Есть привязанные события.");
+//        categoryRepository.deleteById(id);
     }
 }

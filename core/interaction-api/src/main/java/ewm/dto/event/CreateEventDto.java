@@ -1,6 +1,8 @@
 package ewm.dto.event;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
@@ -26,6 +28,8 @@ public class CreateEventDto {
 	private String description;
 
 	@NotNull(message = "Время события должно быть указано")
+	@JsonProperty("eventDate")
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", shape = JsonFormat.Shape.STRING)
 	private String eventDate;
 
 	@NotNull(message = "Место проведения события должно быть указано")

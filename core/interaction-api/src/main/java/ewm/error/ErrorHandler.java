@@ -20,7 +20,7 @@ public class ErrorHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler({MethodArgumentNotValidException.class, MissingServletRequestParameterException.class})
     public ErrorResponse handleDateTimeParseException(MethodArgumentNotValidException e) {
-        log.error(e.getMessage());
+        log.error(e.getMessage(),e.getStackTrace());
         return new ErrorResponse(HttpStatus.BAD_REQUEST,
                 "Ошибка Валидации",
                 e.getMessage());
@@ -29,7 +29,7 @@ public class ErrorHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler({NotFoundException.class})
     public ErrorResponse handleNotFoundException(NotFoundException e) {
-        log.error(e.getMessage());
+        log.error(e.getMessage(),e.getStackTrace());
         return new ErrorResponse(HttpStatus.NOT_FOUND, "Сущность не найдена", e.getMessage());
     }
 
@@ -37,7 +37,7 @@ public class ErrorHandler {
     @ExceptionHandler({ExistException.class, ConflictException.class})
     @ResponseStatus(HttpStatus.CONFLICT)
     public ErrorResponse handleParameterConflict(final Exception e) {
-        log.error(e.getMessage());
+        log.error(e.getMessage(),e.getStackTrace());
         return new ErrorResponse(HttpStatus.CONFLICT,
                 "Ошибка уникальности",
                 e.getMessage());
@@ -56,7 +56,7 @@ public class ErrorHandler {
     @ExceptionHandler({ValidationException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleValidationException(final ValidationException e) {
-        log.error(e.getMessage());
+        log.error(e.getMessage(),e.getStackTrace());
         return new ErrorResponse(
                 HttpStatus.BAD_REQUEST,
                 "Ошибка валидации",

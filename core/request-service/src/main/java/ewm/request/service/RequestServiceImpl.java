@@ -1,5 +1,9 @@
 package ewm.request.service;
 
+import ewm.client.EventClient;
+import ewm.client.UserAdminClient;
+import ewm.dto.event.EventDto;
+import ewm.dto.user.UserDto;
 import ewm.error.exception.ConflictException;
 import ewm.error.exception.NotFoundException;
 //import ewm.event.EventRepository;
@@ -11,6 +15,7 @@ import ewm.model.Request;
 import ewm.model.RequestStatus;
 import ewm.request.repository.RequestRepository;
 //import ewm.user.repository.UserRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +33,8 @@ import java.util.Optional;
 public class RequestServiceImpl implements RequestService {
 
     private final  RequestRepository requestRepository;
+    private final EventClient eventClient;
+    private final UserAdminClient userAdminClient;
 //    @Autowired
 //    private  EventRepository eventRepository;
 //    private final UserRepository userRepository;
@@ -41,7 +48,8 @@ public class RequestServiceImpl implements RequestService {
     @Transactional
     @Override
     public RequestDto createRequest(Long userId, Long eventId) {
-        Event event = getEvent(eventId);
+        EventDto event = eventClient.getEventById(eventId);
+        UserDto userDto = userAdminClient.getUserById(userId);
 //        User user = getUser(userId);
         checkRequest(userId, event);
         Request request = Request.builder()
@@ -63,7 +71,7 @@ public class RequestServiceImpl implements RequestService {
     @Transactional
     @Override
     public RequestDto cancelRequest(Long userId, Long requestId) {
-//        getUser(userId);
+        userAdminClient.getUserById(userId);
         Request request = getRequest(requestId);
         if (!request.getRequesterId().equals(userId))
             throw new ConflictException("Другой пользователь не может отменить запрос");
@@ -75,10 +83,14 @@ public class RequestServiceImpl implements RequestService {
         return RequestMapper.INSTANCE.mapToRequestDto(request);
     }
 
-    private void checkRequest(Long userId, Event event) {
+    public List<RequestDto> findAllByEventId(Long eventId){
+        return RequestMapper.INSTANCE.mapListRequests(requestRepository.findAllByEventId(eventId));
+    }
+
+    private void checkRequest(Long userId, EventDto event) {
         if (!requestRepository.findAllByRequesterIdAndEventId(userId, event.getId()).isEmpty())
             throw new ConflictException("нельзя добавить повторный запрос");
-        if (event.getInitiatorId().equals(userId))
+        if (event.getInitiator().getId().equals(userId))
             throw new ConflictException("инициатор события не может добавить запрос на участие в своём событии");
         if (!event.getState().equals(EventState.PUBLISHED))
             throw new ConflictException("нельзя участвовать в неопубликованном событии");
