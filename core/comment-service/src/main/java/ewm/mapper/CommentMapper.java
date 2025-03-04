@@ -1,7 +1,7 @@
-package ewm.comment.mapper;
+package ewm.mapper;
 
 import ewm.dto.comment.CommentDto;
-import ewm.comment.model.Comment;
+import ewm.model.Comment;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 

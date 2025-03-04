@@ -1,8 +1,8 @@
-package ewm.comment.controller;
+package ewm.controller;
 
 import ewm.dto.comment.CommentDto;
 import ewm.dto.comment.CreateCommentDto;
-import ewm.comment.service.CommentService;
+import ewm.service.CommentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

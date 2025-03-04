@@ -1,16 +1,14 @@
-package ewm.comment.service;
+package ewm.service;
 
 import ewm.client.UserClient;
-import ewm.comment.mapper.CommentMapper;
-import ewm.comment.model.Comment;
-import ewm.comment.repository.CommentRepository;
 import ewm.dto.comment.CommentDto;
 import ewm.dto.comment.CreateCommentDto;
 import ewm.dto.user.UserDto;
 import ewm.error.exception.ConflictException;
 import ewm.error.exception.NotFoundException;
-import ewm.event.EventRepository;
-import ewm.event.model.Event;
+import ewm.mapper.CommentMapper;
+import ewm.model.Comment;
+import ewm.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,18 +24,16 @@ public class CommentServiceImpl implements CommentService {
     private static final String COMMENT_NOT_FOUND = "Comment not found";
 
     private final CommentRepository commentRepository;
-    private final EventRepository eventRepository;
     private final UserClient userClient;
 
     @Override
     @Transactional
     public CommentDto addComment(Long userId, Long eventId, CreateCommentDto createCommentDto) {
         UserDto user = userClient.getUserById(userId);
-        Event event = getEventById(eventId);
 
         Comment comment = Comment.builder()
                 .authorId(userId)
-                .event(event)
+                .eventId(eventId)
                 .content(createCommentDto.getContent())
                 .build();
 
@@ -47,14 +43,14 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public CommentDto getComment(Long eventId, Long commentId) {
-        getEventById(eventId);
+//        getEventById(eventId);
         return CommentMapper.INSTANCE.commentToCommentDto(getCommentById(commentId));
     }
 
     @Override
     public List<CommentDto> getEventCommentsByUserId(Long userId, Long eventId) {
         userClient.getUserById(userId);
-        getEventById(eventId);
+//        getEventById(eventId);
         return commentRepository.findAllByEventIdAndAuthorId(eventId, userId)
                 .stream()
                 .map(CommentMapper.INSTANCE::commentToCommentDto)
@@ -63,7 +59,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public List<CommentDto> getEventComments(Long eventId) {
-        getEventById(eventId);
+//        getEventById(eventId);
         return commentRepository.findAllByEventId(eventId)
                 .stream()
                 .map(CommentMapper.INSTANCE::commentToCommentDto)
@@ -73,7 +69,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     @Transactional
     public CommentDto updateComment(Long userId, Long eventId, Long commentId, CreateCommentDto createCommentDto) {
-        getEventById(eventId);
+//        getEventById(eventId);
         Comment comment = getCommentById(commentId);
         UserDto user = userClient.getUserById(userId);
         if (!Objects.equals(comment.getAuthorId(), user.getId())) {
@@ -95,13 +91,7 @@ public class CommentServiceImpl implements CommentService {
         commentRepository.deleteById(commentId);
     }
 
-    private Event getEventById(Long eventId) {
-        Optional<Event> optionalEvent = eventRepository.findById(eventId);
-        if (optionalEvent.isEmpty()) {
-            throw new NotFoundException("Event not found");
-        }
-        return optionalEvent.get();
-    }
+
 
     private Comment getCommentById(Long commentId) {
         Optional<Comment> optionalComment = commentRepository.findById(commentId);

@@ -1,4 +1,4 @@
-package ewm.comment.service;
+package ewm.service;
 
 import ewm.dto.comment.CommentDto;
 import ewm.dto.comment.CreateCommentDto;

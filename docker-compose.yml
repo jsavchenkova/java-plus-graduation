@@ -128,6 +128,28 @@ services:
         interval: 25s
         retries: 10
 
+  comment-srvice:
+    build: core/comment-service
+    container_name: ewm-comment-service
+    depends_on:
+      ewm-db:
+        condition: service_healthy
+      config-server:
+        condition: service_healthy
+    networks:
+      - ewm-net
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://ewm-db:5432/ewm-main
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery-server:8761/eureka/
+      - SERVER_PORT=8083
+    healthcheck:
+        test: "curl --fail --silent localhost:8083/actuator/health | grep UP || exit 1"
+        timeout: 5s
+        interval: 25s
+        retries: 10
+
   ewm-db:
     image: postgres:16.1
     container_name: postgres-ewm-main-db
