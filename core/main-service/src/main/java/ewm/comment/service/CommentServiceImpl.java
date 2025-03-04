@@ -1,16 +1,16 @@
 package ewm.comment.service;
 
+import ewm.client.UserClient;
+import ewm.comment.mapper.CommentMapper;
+import ewm.comment.model.Comment;
+import ewm.comment.repository.CommentRepository;
 import ewm.dto.comment.CommentDto;
 import ewm.dto.comment.CreateCommentDto;
-import ewm.comment.mapper.CommentMapper;
-import ewm.model.Comment;
-import ewm.comment.repository.CommentRepository;
+import ewm.dto.user.UserDto;
 import ewm.error.exception.ConflictException;
 import ewm.error.exception.NotFoundException;
 import ewm.event.EventRepository;
-import ewm.model.Event;
-import ewm.model.User;
-import ewm.user.repository.UserRepository;
+import ewm.event.model.Event;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,17 +26,17 @@ public class CommentServiceImpl implements CommentService {
     private static final String COMMENT_NOT_FOUND = "Comment not found";
 
     private final CommentRepository commentRepository;
-    private final UserRepository userRepository;
     private final EventRepository eventRepository;
+    private final UserClient userClient;
 
     @Override
     @Transactional
     public CommentDto addComment(Long userId, Long eventId, CreateCommentDto createCommentDto) {
-        User user = getUserById(userId);
+        UserDto user = userClient.getUserById(userId);
         Event event = getEventById(eventId);
 
         Comment comment = Comment.builder()
-                .author(user)
+                .authorId(userId)
                 .event(event)
                 .content(createCommentDto.getContent())
                 .build();
@@ -53,7 +53,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public List<CommentDto> getEventCommentsByUserId(Long userId, Long eventId) {
-        getUserById(userId);
+        userClient.getUserById(userId);
         getEventById(eventId);
         return commentRepository.findAllByEventIdAndAuthorId(eventId, userId)
                 .stream()
@@ -75,8 +75,8 @@ public class CommentServiceImpl implements CommentService {
     public CommentDto updateComment(Long userId, Long eventId, Long commentId, CreateCommentDto createCommentDto) {
         getEventById(eventId);
         Comment comment = getCommentById(commentId);
-        User user = getUserById(userId);
-        if (!Objects.equals(comment.getAuthor().getId(), user.getId())) {
+        UserDto user = userClient.getUserById(userId);
+        if (!Objects.equals(comment.getAuthorId(), user.getId())) {
             throw new ConflictException("This user can't update comment");
         }
         comment.setContent(createCommentDto.getContent());
@@ -86,21 +86,13 @@ public class CommentServiceImpl implements CommentService {
     @Override
     @Transactional
     public void deleteComment(Long userId, Long eventId, Long commentId) {
-        getEventById(eventId);
+        userClient.getUserById(userId);
         Comment comment = getCommentById(commentId);
-        User user = getUserById(userId);
-        if (!Objects.equals(comment.getAuthor().getId(), user.getId())) {
+        UserDto user = userClient.getUserById(userId);
+        if (!Objects.equals(comment.getAuthorId(), user.getId())) {
             throw new ConflictException("This user can't delete comment");
         }
         commentRepository.deleteById(commentId);
-    }
-
-    private User getUserById(Long userId) {
-        Optional<User> optionalUser = userRepository.findById(userId);
-        if (optionalUser.isEmpty()) {
-            throw new NotFoundException("User not found");
-        }
-        return optionalUser.get();
     }
 
     private Event getEventById(Long eventId) {

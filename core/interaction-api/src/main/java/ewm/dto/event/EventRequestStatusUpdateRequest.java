@@ -1,10 +1,10 @@
 package ewm.dto.event;
 
+import ewm.enums.RequestStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ewm.model.RequestStatus;
 
 import java.util.List;
 

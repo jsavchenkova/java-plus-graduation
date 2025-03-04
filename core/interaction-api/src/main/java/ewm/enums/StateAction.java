@@ -1,4 +1,4 @@
-package ewm.model;
+package ewm.enums;
 
 public enum StateAction {
 	SEND_TO_REVIEW,

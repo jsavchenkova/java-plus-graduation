@@ -4,10 +4,14 @@ spring:
       discovery.locator.enabled: true
       routes:
         - id: main-service_route
+          uri: lb://user-service
+          predicates:
+            - Path= /admin/users, /admin/users/*, /user, /user/*, /user/
+        - id: main-service_route
           uri: lb://main-service
           predicates:
-#            - Path=/admin/categories, /admin/categories/*, /categories, /categories/*, /users/{userId}/events/{eventId}/comments, /users/{userId}/events/{eventId}/comments/*, /events/{eventId}/comments, /events/{eventId}/comments/*, /events/{eventId}/comments, /events/{eventId}/comments/*, /compilations, /compilations/*, /admin/events, /admin/events/*, /users/*/events, /users/*/events/*, /users/*/events/*/requests, /events, /events/*, /users/*/requests, /users/*/requests/*/cancel, /admin/users, /admin/users/*, /admin/compilations, /admin/compilations/*, /compilations, /compilations/*
-            - Path= /**
+            - Path=/admin/categories, /admin/categories/*, /categories, /categories/*, /users/{userId}/events/{eventId}/comments, /users/{userId}/events/{eventId}/comments/*, /events/{eventId}/comments, /events/{eventId}/comments/*, /events/{eventId}/comments, /events/{eventId}/comments/*, /compilations, /compilations/*, /admin/events, /admin/events/*, /users/*/events, /users/*/events/*, /users/*/events/*/requests, /events, /events/*, /users/*/requests, /users/*/requests/*/cancel, /admin/compilations, /admin/compilations/*, /compilations, /compilations/*
+#            - Path= /**
 
 server:
   port: 8080

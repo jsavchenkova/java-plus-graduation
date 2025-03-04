@@ -1,5 +1,6 @@
-package ewm.model;
+package ewm.compilation.model;
 
+import ewm.event.model.Event;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

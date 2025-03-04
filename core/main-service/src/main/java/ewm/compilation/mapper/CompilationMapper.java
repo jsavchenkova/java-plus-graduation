@@ -1,7 +1,7 @@
 package ewm.compilation.mapper;
 
 import ewm.dto.compilation.CompilationDtoResponse;
-import ewm.model.Compilation;
+import ewm.compilation.model.Compilation;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 

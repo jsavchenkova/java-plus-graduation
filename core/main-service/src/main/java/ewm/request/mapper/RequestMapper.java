@@ -1,7 +1,7 @@
 package ewm.request.mapper;
 
 import ewm.dto.request.RequestDto;
-import ewm.model.Request;
+import ewm.request.model.Request;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
@@ -13,7 +13,7 @@ public interface RequestMapper {
 	RequestMapper INSTANCE = Mappers.getMapper(RequestMapper.class);
 
 	@Mapping(source = "event.id", target = "event")
-	@Mapping(source = "requester.id", target = "requester")
+	@Mapping(source = "requesterId", target = "requester")
 	@Mapping(source = "created", target = "created", dateFormat = "yyyy-MM-dd HH:mm:ss")
 	RequestDto mapToRequestDto(Request request);
 

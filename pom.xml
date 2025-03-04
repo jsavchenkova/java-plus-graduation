@@ -26,6 +26,7 @@
 		<module>core</module>
 		<module>stats</module>
 		<module>infra</module>
+        <module>core/user-service</module>
     </modules>
 
 	<build>

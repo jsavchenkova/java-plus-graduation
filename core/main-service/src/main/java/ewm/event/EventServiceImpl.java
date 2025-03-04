@@ -1,7 +1,9 @@
 package ewm.event;
 
-import ewm.model.Category;
+import ewm.category.model.Category;
 import ewm.category.repository.CategoryRepository;
+import ewm.client.UserClient;
+import ewm.dto.user.UserDto;
 import ewm.error.exception.ConflictException;
 import ewm.error.exception.NotFoundException;
 import ewm.error.exception.ValidationException;
@@ -13,17 +15,15 @@ import ewm.dto.event.EventRequestStatusUpdateResult;
 import ewm.dto.event.PublicGetEventRequestDto;
 import ewm.dto.event.UpdateEventDto;
 import ewm.event.mapper.EventMapper;
-import ewm.model.Event;
-import ewm.model.EventState;
-import ewm.model.StateAction;
+import ewm.event.model.Event;
+import ewm.enums.EventState;
+import ewm.enums.StateAction;
 import ewm.dto.request.RequestDto;
 import ewm.request.mapper.RequestMapper;
-import ewm.model.Request;
-import ewm.model.RequestStatus;
+import ewm.request.model.Request;
+import ewm.enums.RequestStatus;
 import ewm.request.repository.RequestRepository;
 import ewm.statistics.service.StatisticsService;
-import ewm.model.User;
-import ewm.user.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -43,14 +43,14 @@ public class EventServiceImpl implements EventService {
     private static final String EVENT_NOT_FOUND_MESSAGE = "Event not found";
 
     private final EventRepository repository;
-    private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
     private final StatisticsService statisticsService;
     private final RequestRepository requestRepository;
+    private final UserClient userClient;
 
     @Override
     public List<EventDto> getEvents(Long userId, Integer from, Integer size) {
-        getUser(userId);
+        userClient.getUserById(userId);
         Pageable pageable = PageRequest.of(from, size);
         return repository.findByInitiatorId(userId, pageable).stream()
                 .map(this::eventToDto)
@@ -59,7 +59,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public EventDto getEventById(Long userId, Long id, String ip, String uri) {
-        getUser(userId);
+        userClient.getUserById(userId);
         Optional<Event> event = repository.findByIdAndInitiatorId(id, userId);
         if (event.isEmpty()) {
             throw new NotFoundException(EVENT_NOT_FOUND_MESSAGE);
@@ -69,7 +69,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public EventDto createEvent(Long userId, CreateEventDto eventDto) {
-        User user = getUser(userId);
+        UserDto user = userClient.getUserById(userId);
         Category category = getCategory(eventDto.getCategory());
         Event event = EventMapper.mapCreateDtoToEvent(eventDto);
         if (event.getPaid() == null) {
@@ -82,7 +82,7 @@ public class EventServiceImpl implements EventService {
             event.setRequestModeration(true);
         }
 
-        event.setInitiator(user);
+        event.setInitiatorId(userId);
         event.setCategory(category);
         event.setState(EventState.PENDING);
         Event newEvent = repository.save(event);
@@ -91,7 +91,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public EventDto updateEvent(Long userId, UpdateEventDto eventDto, Long eventId) {
-        getUser(userId);
+        userClient.getUserById(userId);
         Optional<Event> eventOptional = repository.findById(eventId);
         if (eventOptional.isEmpty()) {
             throw new NotFoundException(EVENT_NOT_FOUND_MESSAGE);
@@ -154,12 +154,13 @@ public class EventServiceImpl implements EventService {
                 event.getPublishedOn(), LocalDateTime.now(), List.of(request.getRequestURI())).get(id);
         event.setViews(views);
         event = repository.save(event);
-        return EventMapper.mapEventToEventDto(event);
+        UserDto initiator = userClient.getUserById(event.getInitiatorId());
+        return EventMapper.mapEventToEventDto(event, initiator);
     }
 
     @Override
     public List<RequestDto> getEventRequests(Long userId, Long eventId) {
-        getUser(userId);
+        userClient.getUserById(userId);
         getEvent(eventId);
         return RequestMapper.INSTANCE.mapListRequests(requestRepository.findAllByEvent_id(eventId));
     }
@@ -167,7 +168,7 @@ public class EventServiceImpl implements EventService {
     @Override
     public EventRequestStatusUpdateResult changeStatusEventRequests(Long userId, Long eventId,
                                                                     EventRequestStatusUpdateRequest request) {
-        getUser(userId);
+        userClient.getUserById(userId);
         Event event = getEvent(eventId);
         EventRequestStatusUpdateResult response = new EventRequestStatusUpdateResult();
         List<Request> requests = requestRepository.findAllById(request.getRequestIds());
@@ -211,12 +212,13 @@ public class EventServiceImpl implements EventService {
         Event event = getEvent(eventId);
         checkEventForUpdate(event, eventDto.getStateAction());
         Event updatedEvent = repository.save(prepareEventForUpdate(event, eventDto));
-        EventDto result = EventMapper.mapEventToEventDto(updatedEvent);
+        UserDto initiator = userClient.getUserById(event.getInitiatorId());
+        EventDto result = EventMapper.mapEventToEventDto(updatedEvent, initiator);
         return result;
     }
 
     private EventDto eventToDto(Event event) {
-        return EventMapper.mapEventToEventDto(event);
+        return EventMapper.mapEventToEventDto(event, userClient.getUserById(event.getInitiatorId()));
     }
 
     private Event getEvent(Long eventId) {
@@ -275,14 +277,6 @@ public class EventServiceImpl implements EventService {
     private void checkEventDate(LocalDateTime dateTime) {
         if (dateTime.isBefore(LocalDateTime.now().plusHours(1)))
             throw new ConflictException("Дата начала события меньше чем час " + dateTime);
-    }
-
-    private User getUser(Long userId) {
-        Optional<User> user = userRepository.findById(userId);
-        if (user.isEmpty()) {
-            throw new NotFoundException("Пользователь не найден");
-        }
-        return user.get();
     }
 
     private Category getCategory(Long categoryId) {

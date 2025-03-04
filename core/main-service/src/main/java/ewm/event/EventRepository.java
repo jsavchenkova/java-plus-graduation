@@ -1,7 +1,7 @@
 package ewm.event;
 
-import ewm.model.Event;
-import ewm.model.EventState;
+import ewm.event.model.Event;
+import ewm.enums.EventState;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -16,7 +16,7 @@ public interface EventRepository extends JpaRepository<Event, Long> {
 	Optional<Event> findByIdAndInitiatorId(Long id, long initiatorId);
 
 	@Query("SELECT e FROM Event AS e " +
-			"WHERE ((:users) IS NULL OR e.initiator.id IN :users) " +
+			"WHERE ((:users) IS NULL OR e.initiatorId IN :users) " +
 			"AND ((:states) IS NULL OR e.state IN :states) " +
 			"AND ((:categories) IS NULL OR e.category.id IN :categories) " +
 			"AND ((cast(:rangeStart as timestamp) IS NULL OR e.eventDate >= :rangeStart) " +

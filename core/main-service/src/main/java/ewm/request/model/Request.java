@@ -1,5 +1,7 @@
-package ewm.model;
+package ewm.request.model;
 
+import ewm.enums.RequestStatus;
+import ewm.event.model.Event;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,9 +28,8 @@ public class Request {
 	@JoinColumn(name = "event_id")
 	private Event event;
 
-	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "requester_id")
-	private User requester;
+	private Long requesterId;
 
 	private RequestStatus status;
 }

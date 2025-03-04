@@ -1,4 +1,4 @@
-package ewm.model;
+package ewm.enums;
 
 public enum RequestStatus {
 	PENDING,

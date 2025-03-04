@@ -5,8 +5,8 @@ import ewm.dto.event.CreateEventDto;
 import ewm.dto.event.EventDto;
 import ewm.dto.event.LocationDto;
 import ewm.dto.event.UpdateEventDto;
-import ewm.model.Event;
-import ewm.user.mapper.UserMapper;
+import ewm.dto.user.UserDto;
+import ewm.event.model.Event;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -33,7 +33,7 @@ public class EventMapper {
 		return event;
 	}
 
-	public static EventDto mapEventToEventDto(Event event) {
+	public static EventDto mapEventToEventDto(Event event, UserDto initiator) {
 		EventDto dto = EventDto.builder()
 				.id(event.getId())
 				.title(event.getTitle())
@@ -46,7 +46,7 @@ public class EventMapper {
 				.participantLimit(event.getParticipantLimit())
 				.location(LocationDto.builder().lat(event.getLat()).lon(event.getLon()).build())
 				.category(CategoryMapper.INSTANCE.categoryToCategoryDto(event.getCategory()))
-				.initiator(UserMapper.mapToUserDto(event.getInitiator()))
+				.initiator(initiator)
 				.requestModeration(event.getRequestModeration())
 				.views((event.getViews() == null) ? 0L : event.getViews())
 				.confirmedRequests(event.getConfirmedRequests())
@@ -57,7 +57,9 @@ public class EventMapper {
 	public static List<EventDto> mapToEventDto(Iterable<Event> events) {
 		List<EventDto> dtos = new ArrayList<>();
 		for (Event event : events) {
-			dtos.add(mapEventToEventDto(event));
+			UserDto userDto = new UserDto();
+			userDto.setId(event.getInitiatorId());
+			dtos.add(mapEventToEventDto(event, userDto));
 		}
 		return dtos;
 	}

@@ -1,4 +1,4 @@
-package ewm.user.repository;
+package ewm.repository;
 
 import ewm.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -1,4 +1,4 @@
-package ewm.user.service;
+package ewm.service;
 
 import ewm.dto.user.UserDto;
 
@@ -10,4 +10,6 @@ public interface UserService {
 	UserDto createUser(UserDto userDto);
 
 	void deleteUser(Long userId);
+
+	UserDto getUserById(Long userId);
 }
