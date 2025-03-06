@@ -1,7 +1,7 @@
-package ewm.request.controller.priv;
+package ewm.controller;
 
 import ewm.dto.request.RequestDto;
-import ewm.request.service.RequestService;
+import ewm.service.RequestService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

@@ -2,6 +2,7 @@ package ewm.event;
 
 import ewm.category.model.Category;
 import ewm.category.repository.CategoryRepository;
+import ewm.client.RequestOperations;
 import ewm.client.UserClient;
 import ewm.dto.user.UserDto;
 import ewm.error.exception.ConflictException;
@@ -19,10 +20,7 @@ import ewm.event.model.Event;
 import ewm.enums.EventState;
 import ewm.enums.StateAction;
 import ewm.dto.request.RequestDto;
-import ewm.request.mapper.RequestMapper;
-import ewm.request.model.Request;
 import ewm.enums.RequestStatus;
-import ewm.request.repository.RequestRepository;
 import ewm.statistics.service.StatisticsService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -45,8 +43,8 @@ public class EventServiceImpl implements EventService {
     private final EventRepository repository;
     private final CategoryRepository categoryRepository;
     private final StatisticsService statisticsService;
-    private final RequestRepository requestRepository;
     private final UserClient userClient;
+    private final RequestOperations requestClient;
 
     @Override
     public List<EventDto> getEvents(Long userId, Integer from, Integer size) {
@@ -159,10 +157,20 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    public EventDto publicGetEvent(Long eventId) {
+        Event event = getEvent(eventId);
+        if (event.getState() != EventState.PUBLISHED) {
+            throw new NotFoundException("Событие не найдено");
+        }
+        UserDto initiator = userClient.getUserById(event.getInitiatorId());
+        return EventMapper.mapEventToEventDto(event, initiator);
+    }
+
+    @Override
     public List<RequestDto> getEventRequests(Long userId, Long eventId) {
         userClient.getUserById(userId);
         getEvent(eventId);
-        return RequestMapper.INSTANCE.mapListRequests(requestRepository.findAllByEvent_id(eventId));
+        return requestClient.getRequestsByEventId(eventId);
     }
 
     @Override
@@ -171,24 +179,31 @@ public class EventServiceImpl implements EventService {
         userClient.getUserById(userId);
         Event event = getEvent(eventId);
         EventRequestStatusUpdateResult response = new EventRequestStatusUpdateResult();
-        List<Request> requests = requestRepository.findAllById(request.getRequestIds());
+        List<RequestDto> requests = requestClient.findAllById(request.getRequestIds());
         if (request.getStatus().equals(RequestStatus.REJECTED)) {
             checkRequestsStatus(requests);
             requests.stream()
-                    .map(tmpReq -> changeStatus(tmpReq, RequestStatus.REJECTED))
+                    .map(tmpReq -> {
+                        tmpReq.setStatus(RequestStatus.REJECTED);
+                        return tmpReq;
+                    })
                     .collect(Collectors.toList());
-            requestRepository.saveAll(requests);
-            response.setRejectedRequests(RequestMapper.INSTANCE.mapListRequests(requests));
+
+            requestClient.updateAllRequest(requests);
+            response.setRejectedRequests(requests);
         } else {
             if (requests.size() + event.getConfirmedRequests() > event.getParticipantLimit())
                 throw new ConflictException("Превышен лимит заявок");
             requests.stream()
-                    .map(tmpReq -> changeStatus(tmpReq, RequestStatus.CONFIRMED))
+                    .map(tmpReq -> {
+                        tmpReq.setStatus(RequestStatus.CONFIRMED);
+                        return tmpReq;
+                    })
                     .collect(Collectors.toList());
-            requestRepository.saveAll(requests);
+            requestClient.updateAllRequest(requests);
             event.setConfirmedRequests(event.getConfirmedRequests() + requests.size());
             repository.save(event);
-            response.setConfirmedRequests(RequestMapper.INSTANCE.mapListRequests(requests));
+            response.setConfirmedRequests(requests);
         }
         return response;
     }
@@ -215,6 +230,12 @@ public class EventServiceImpl implements EventService {
         UserDto initiator = userClient.getUserById(event.getInitiatorId());
         EventDto result = EventMapper.mapEventToEventDto(updatedEvent, initiator);
         return result;
+    }
+
+    public EventDto updateConfirmRequests(EventDto eventDto) {
+        Event event = EventMapper.mapToEvent(eventDto);
+        UserDto user = userClient.getUserById(event.getInitiatorId());
+        return EventMapper.mapEventToEventDto(repository.save(event), user);
     }
 
     private EventDto eventToDto(Event event) {
@@ -349,13 +370,9 @@ public class EventServiceImpl implements EventService {
         return uri + "/" + eventId;
     }
 
-    private Request changeStatus(Request request, RequestStatus status) {
-        request.setStatus(status);
-        return request;
-    }
 
-    private void checkRequestsStatus(List<Request> requests) {
-        Optional<Request> confirmedReq = requests.stream()
+    private void checkRequestsStatus(List<RequestDto> requests) {
+        Optional<RequestDto> confirmedReq = requests.stream()
                 .filter(request -> request.getStatus().equals(RequestStatus.CONFIRMED))
                 .findFirst();
         if (confirmedReq.isPresent())

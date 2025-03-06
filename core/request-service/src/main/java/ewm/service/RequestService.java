@@ -1,4 +1,4 @@
-package ewm.request.service;
+package ewm.service;
 
 import ewm.dto.request.RequestDto;
 
@@ -10,4 +10,12 @@ public interface RequestService {
 	RequestDto createRequest(Long userId, Long eventId);
 
 	RequestDto cancelRequest(Long userId, Long requestId);
+
+	List<RequestDto> findAllById(List<Long> ids);
+
+	List<RequestDto> findAllByEventId(Long eventId);
+
+	RequestDto updateRequest(RequestDto requestDto);
+
+	List<RequestDto> updateAllRequests(List<RequestDto> requestDtoList);
 }

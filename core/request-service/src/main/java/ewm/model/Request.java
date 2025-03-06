@@ -1,7 +1,6 @@
-package ewm.request.model;
+package ewm.model;
 
 import ewm.enums.RequestStatus;
-import ewm.event.model.Event;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,9 +23,7 @@ public class Request {
 
 	private LocalDateTime created;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "event_id")
-	private Event event;
+	private Long eventId;
 
 	@JoinColumn(name = "requester_id")
 	private Long requesterId;
