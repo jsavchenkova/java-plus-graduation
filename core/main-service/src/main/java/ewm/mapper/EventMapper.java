@@ -2,10 +2,7 @@ package ewm.mapper;
 
 import ewm.category.model.Category;
 import ewm.dto.category.CategoryDto;
-import ewm.dto.event.CreateEventDto;
-import ewm.dto.event.EventDto;
-import ewm.dto.event.LocationDto;
-import ewm.dto.event.UpdateEventDto;
+import ewm.dto.event.*;
 import ewm.dto.user.UserDto;
 import ewm.enums.EventState;
 import ewm.event.model.Event;
@@ -110,5 +107,38 @@ public class EventMapper {
         event.setConfirmedRequests(dto.getConfirmedRequests());
 
         return event;
+    }
+
+    public static UpdatedEventDto mapEventToUpdatedEventDto(Event event, UserDto initiator) {
+        CategoryDto categoryDto = new CategoryDto();
+        categoryDto.setId(event.getCategory().getId());
+        UpdatedEventDto dto = UpdatedEventDto.builder()
+                .id(event.getId())
+                .title(event.getTitle())
+                .eventDate(event.getEventDate())
+                .annotation(event.getAnnotation())
+                .paid(event.getPaid())
+                .createdOn(event.getCreatedOn())
+                .description(event.getDescription())
+                .state(event.getState().toString())
+                .participantLimit(event.getParticipantLimit())
+                .location(LocationDto.builder().lat(event.getLat()).lon(event.getLon()).build())
+                .category(categoryDto)
+                .initiator(initiator)
+                .requestModeration(event.getRequestModeration())
+                .views((event.getViews() == null) ? 0L : event.getViews())
+                .confirmedRequests(event.getConfirmedRequests())
+                .build();
+        return dto;
+    }
+
+    public static List<UpdatedEventDto> mapToUpdatedEventDto(Iterable<Event> events) {
+        List<UpdatedEventDto> dtos = new ArrayList<>();
+        for (Event event : events) {
+            UserDto userDto = new UserDto();
+            userDto.setId(event.getInitiatorId());
+            dtos.add(mapEventToUpdatedEventDto(event, userDto));
+        }
+        return dtos;
     }
 }

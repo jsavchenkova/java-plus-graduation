@@ -11,13 +11,13 @@ public interface EventService {
 
     EventDto getEventById(Long userId, Long eventId, String ip, String uri);
 
-    EventDto createEvent(Long userId, CreateEventDto eventDto);
+    UpdatedEventDto createEvent(Long userId, CreateEventDto eventDto);
 
-    List<EventDto> adminGetEvents(AdminGetEventRequestDto requestParams);
+    List<UpdatedEventDto> adminGetEvents(AdminGetEventRequestDto requestParams);
 
-    EventDto adminChangeEvent(Long eventId, UpdateEventDto eventDto);
+    UpdatedEventDto adminChangeEvent(Long eventId, UpdateEventDto eventDto);
 
-    EventDto updateEvent(Long userId, UpdateEventDto eventDto, Long eventId);
+    UpdatedEventDto updateEvent(Long userId, UpdateEventDto eventDto, Long eventId);
 
     List<EventDto> publicGetEvents(PublicGetEventRequestDto requestParams, HttpServletRequest request);
 

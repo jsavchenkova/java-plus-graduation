@@ -1,9 +1,9 @@
 package ewm.event.controller.admin;
 
-import ewm.event.EventService;
 import ewm.dto.event.AdminGetEventRequestDto;
-import ewm.dto.event.EventDto;
 import ewm.dto.event.UpdateEventDto;
+import ewm.dto.event.UpdatedEventDto;
+import ewm.event.EventService;
 import ewm.event.validate.EventValidate;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,14 +22,14 @@ public class AdminEventController {
 	private final EventService eventService;
 
 	@GetMapping
-	public List<EventDto> adminGetEvents(AdminGetEventRequestDto requestParams) {
+	public List<UpdatedEventDto> adminGetEvents(AdminGetEventRequestDto requestParams) {
 		log.info("Получить события, согласно устловиям -> {}", requestParams);
 		return eventService.adminGetEvents(requestParams);
 	}
 
 	@PatchMapping("/{eventId}")
-	public EventDto adminChangeEvent(@PathVariable Long eventId,
-									 @RequestBody @Valid UpdateEventDto eventDto) {
+	public UpdatedEventDto adminChangeEvent(@PathVariable Long eventId,
+											@RequestBody @Valid UpdateEventDto eventDto) {
 		log.info("Изменить событие eventId = {}, поля -> {}", eventId, eventDto);
 		EventValidate.updateEventDateValidate(eventDto, log);
 		EventValidate.textLengthValidate(eventDto, log);

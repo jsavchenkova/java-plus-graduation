@@ -29,7 +29,7 @@ public class UserEventController {
 
 	@ResponseStatus(HttpStatus.CREATED)
 	@PostMapping
-	EventDto createEvent(@PathVariable Long userId,
+	UpdatedEventDto createEvent(@PathVariable Long userId,
 						 @Valid @RequestBody CreateEventDto event) {
 		EventValidate.eventDateValidate(event, log);
 		return service.createEvent(userId, event);
@@ -45,7 +45,7 @@ public class UserEventController {
 	}
 
 	@PatchMapping("/{eventId}")
-	EventDto updateEvent(@PathVariable Long userId,
+	UpdatedEventDto updateEvent(@PathVariable Long userId,
 						 @PathVariable Long eventId,
 						 @Valid @RequestBody UpdateEventDto event) {
 		EventValidate.updateEventDateValidate(event, log);

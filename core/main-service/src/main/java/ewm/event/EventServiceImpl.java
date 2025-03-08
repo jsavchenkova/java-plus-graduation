@@ -4,17 +4,11 @@ import ewm.category.model.Category;
 import ewm.category.repository.CategoryRepository;
 import ewm.client.RequestOperations;
 import ewm.client.UserClient;
+import ewm.dto.event.*;
 import ewm.dto.user.UserDto;
 import ewm.error.exception.ConflictException;
 import ewm.error.exception.NotFoundException;
 import ewm.error.exception.ValidationException;
-import ewm.dto.event.AdminGetEventRequestDto;
-import ewm.dto.event.CreateEventDto;
-import ewm.dto.event.EventDto;
-import ewm.dto.event.EventRequestStatusUpdateRequest;
-import ewm.dto.event.EventRequestStatusUpdateResult;
-import ewm.dto.event.PublicGetEventRequestDto;
-import ewm.dto.event.UpdateEventDto;
 import ewm.mapper.EventMapper;
 import ewm.event.model.Event;
 import ewm.enums.EventState;
@@ -66,7 +60,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public EventDto createEvent(Long userId, CreateEventDto eventDto) {
+    public UpdatedEventDto createEvent(Long userId, CreateEventDto eventDto) {
         UserDto user = userClient.getUserById(userId);
         Category category = getCategory(eventDto.getCategory());
         Event event = EventMapper.mapCreateDtoToEvent(eventDto);
@@ -84,11 +78,11 @@ public class EventServiceImpl implements EventService {
         event.setCategory(category);
         event.setState(EventState.PENDING);
         Event newEvent = repository.save(event);
-        return eventToDto(newEvent);
+        return EventMapper.mapEventToUpdatedEventDto(newEvent, userClient.getUserById(event.getInitiatorId()));
     }
 
     @Override
-    public EventDto updateEvent(Long userId, UpdateEventDto eventDto, Long eventId) {
+    public UpdatedEventDto updateEvent(Long userId, UpdateEventDto eventDto, Long eventId) {
         userClient.getUserById(userId);
         Optional<Event> eventOptional = repository.findById(eventId);
         if (eventOptional.isEmpty()) {
@@ -100,7 +94,7 @@ public class EventServiceImpl implements EventService {
         }
         updateEventFields(eventDto, foundEvent);
         Event saved = repository.save(foundEvent);
-        return eventToDto(saved);
+        return EventMapper.mapEventToUpdatedEventDto(saved, userClient.getUserById(foundEvent.getInitiatorId()));
     }
 
     @Override
@@ -209,7 +203,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<EventDto> adminGetEvents(AdminGetEventRequestDto requestParams) {
+    public List<UpdatedEventDto> adminGetEvents(AdminGetEventRequestDto requestParams) {
         List<Event> events = repository.findEventsByAdmin(
                 requestParams.getUsers(),
                 requestParams.getStates(),
@@ -219,16 +213,16 @@ public class EventServiceImpl implements EventService {
                 PageRequest.of(requestParams.getFrom() / requestParams.getSize(),
                         requestParams.getSize())
         );
-        return EventMapper.mapToEventDto(events);
+        return EventMapper.mapToUpdatedEventDto(events);
     }
 
     @Override
-    public EventDto adminChangeEvent(Long eventId, UpdateEventDto eventDto) {
+    public UpdatedEventDto adminChangeEvent(Long eventId, UpdateEventDto eventDto) {
         Event event = getEvent(eventId);
         checkEventForUpdate(event, eventDto.getStateAction());
         Event updatedEvent = repository.save(prepareEventForUpdate(event, eventDto));
         UserDto initiator = userClient.getUserById(event.getInitiatorId());
-        EventDto result = EventMapper.mapEventToEventDto(updatedEvent, initiator);
+        UpdatedEventDto result = EventMapper.mapEventToUpdatedEventDto(updatedEvent, initiator);
         return result;
     }
 
