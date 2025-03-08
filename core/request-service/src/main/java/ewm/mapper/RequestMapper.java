@@ -12,9 +12,9 @@ import java.util.List;
 public interface RequestMapper {
     RequestMapper INSTANCE = Mappers.getMapper(RequestMapper.class);
 
-    @Mapping(source = "event.id", target = "event")
+    @Mapping(source = "eventId", target = "event")
     @Mapping(source = "requesterId", target = "requester")
-    @Mapping(source = "created", target = "created", dateFormat = "yyyy-MM-dd HH:mm:ss")
+    @Mapping(source = "created", target = "created", dateFormat = "yyyy-MM-dd'T'HH:mm:ss")
     RequestDto mapToRequestDto(Request request);
 
     List<RequestDto> mapListRequests(List<Request> requests);
@@ -22,4 +22,5 @@ public interface RequestMapper {
     Request mapDtoToRequest(RequestDto requestDto);
 
     List<Request> mapDtoToRequestList(List<RequestDto> requestDtoList);
+
 }

@@ -15,7 +15,7 @@ import ewm.dto.event.EventRequestStatusUpdateRequest;
 import ewm.dto.event.EventRequestStatusUpdateResult;
 import ewm.dto.event.PublicGetEventRequestDto;
 import ewm.dto.event.UpdateEventDto;
-import ewm.event.mapper.EventMapper;
+import ewm.mapper.EventMapper;
 import ewm.event.model.Event;
 import ewm.enums.EventState;
 import ewm.enums.StateAction;
@@ -160,7 +160,7 @@ public class EventServiceImpl implements EventService {
     public EventDto publicGetEvent(Long eventId) {
         Event event = getEvent(eventId);
         if (event.getState() != EventState.PUBLISHED) {
-            throw new NotFoundException("Событие не найдено");
+            throw new ConflictException("Нет события в нужном статусе");
         }
         UserDto initiator = userClient.getUserById(event.getInitiatorId());
         return EventMapper.mapEventToEventDto(event, initiator);

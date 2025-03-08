@@ -1,4 +1,4 @@
-package ewm.event.mapper;
+package ewm.mapper;
 
 import ewm.category.model.Category;
 import ewm.dto.category.CategoryDto;

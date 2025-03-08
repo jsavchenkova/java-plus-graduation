@@ -13,5 +13,5 @@ public interface EventClient {
     EventDto getEventById(@PathVariable Long eventId);
 
     @PostMapping("/event/{eventId}")
-    EventDto updateConfirmRequests(@RequestBody EventDto event);
+    EventDto updateConfirmRequests(@PathVariable Long eventId, @RequestBody EventDto event);
 }

@@ -1,4 +1,4 @@
-package ewm.compilation.mapper;
+package ewm.mapper;
 
 import ewm.dto.compilation.CompilationDtoResponse;
 import ewm.compilation.model.Compilation;

@@ -2,7 +2,7 @@ package ewm.category.service;
 
 import ewm.dto.category.CategoryDto;
 import ewm.dto.category.CreateCategoryDto;
-import ewm.category.mapper.CategoryMapper;
+import ewm.mapper.CategoryMapper;
 import ewm.category.model.Category;
 import ewm.category.repository.CategoryRepository;
 import ewm.error.exception.ConflictException;

@@ -3,7 +3,7 @@ package ewm.compilation.service;
 import ewm.dto.compilation.CompilationDto;
 import ewm.dto.compilation.CompilationDtoResponse;
 import ewm.dto.compilation.CompilationDtoUpdate;
-import ewm.compilation.mapper.CompilationMapper;
+import ewm.mapper.CompilationMapper;
 import ewm.compilation.model.Compilation;
 import ewm.compilation.repositry.CompilationRepository;
 import ewm.error.exception.NotFoundException;

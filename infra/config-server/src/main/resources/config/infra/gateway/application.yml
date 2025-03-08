@@ -14,7 +14,7 @@ spring:
         - id: request-service_route
           uri: lb://request-service
           predicates:
-            - Path= /users/*/requests, /users/*/requests/*/cancel, /request/event/*, /request, /request/all
+            - Path= /users/*/requests, /users/*/requests/*/cancel, /request/event/*, /request, /request/all, /request/find
         - id: main-service_route
           uri: lb://main-service
           predicates:

@@ -6,9 +6,7 @@ import ewm.event.EventService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Validated
@@ -20,13 +18,13 @@ public class EventServiceController implements EventClient {
 
     @Override
     @GetMapping("/event/{eventId}")
-    public EventDto getEventById(Long eventId) {
+    public EventDto getEventById(@PathVariable Long eventId) {
         return service.publicGetEvent(eventId);
     }
 
     @Override
     @PostMapping("/event/{eventId}")
-    public EventDto updateConfirmRequests(EventDto event) {
+    public EventDto updateConfirmRequests(@PathVariable Long eventId, @RequestBody EventDto event) {
         return service.updateConfirmRequests(event);
     }
 }
