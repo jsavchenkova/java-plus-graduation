@@ -10,7 +10,6 @@ import ewm.enums.RequestStatus;
 import ewm.error.exception.ConflictException;
 import ewm.error.exception.NotFoundException;
 import ewm.mapper.ReqMapper;
-import ewm.mapper.RequestMapper;
 import ewm.model.Request;
 import ewm.repository.RequestRepository;
 import lombok.RequiredArgsConstructor;

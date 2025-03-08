@@ -1,7 +1,5 @@
 package ewm.dto.request;
 
-import ewm.dto.event.EventDto;
-import ewm.dto.user.UserDto;
 import ewm.enums.RequestStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
