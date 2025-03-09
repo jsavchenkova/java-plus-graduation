@@ -150,7 +150,7 @@ services:
         interval: 25s
         retries: 10
 
-  request-srvice:
+  request-service:
     build: core/request-service
     container_name: ewm-request-service
     depends_on:
