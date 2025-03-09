@@ -153,8 +153,9 @@ public class EventServiceImpl implements EventService {
     @Override
     public EventDto publicGetEvent(Long eventId) {
         Event event = getEvent(eventId);
+
         if (event.getState() != EventState.PUBLISHED) {
-            throw new ConflictException("Нет события в нужном статусе");
+            return null;
         }
         UserDto initiator = userClient.getUserById(event.getInitiatorId());
         return EventMapper.mapEventToEventDto(event, initiator);

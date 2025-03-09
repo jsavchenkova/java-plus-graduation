@@ -40,6 +40,9 @@ public class RequestServiceImpl implements RequestService {
     @Override
     public RequestDto createRequest(Long userId, Long eventId) {
         EventDto event = eventClient.getEventById(eventId);
+        if (event == null) {
+            throw new ConflictException("Нет события в нужном статусе");
+        }
         UserDto user = userClient.getUserById(userId);
         checkRequest(userId, event);
         Request request = Request.builder()
@@ -53,7 +56,7 @@ public class RequestServiceImpl implements RequestService {
         request = requestRepository.save(request);
         if (!event.getRequestModeration() || event.getParticipantLimit() == 0) {
             event.setConfirmedRequests(event.getConfirmedRequests() + 1);
-            eventClient.updateConfirmRequests(eventId,event);
+            eventClient.updateConfirmRequests(eventId, event);
         }
         return ReqMapper.mapToRequestDto(request);
     }
@@ -69,7 +72,7 @@ public class RequestServiceImpl implements RequestService {
         requestRepository.save(request);
         EventDto event = eventClient.getEventById(request.getEventId());
         event.setConfirmedRequests(event.getConfirmedRequests() - 1);
-        eventClient.updateConfirmRequests(event.getId(),event);
+        eventClient.updateConfirmRequests(event.getId(), event);
         return ReqMapper.mapToRequestDto(request);
     }
 
