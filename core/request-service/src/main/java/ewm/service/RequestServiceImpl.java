@@ -24,7 +24,6 @@ import java.util.Optional;
 
 @Service
 @Slf4j
-//@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class RequestServiceImpl implements RequestService {
     private final RequestRepository requestRepository;
