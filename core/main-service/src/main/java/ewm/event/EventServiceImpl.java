@@ -136,7 +136,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public EventDto publicGetEvent(Long id, HttpServletRequest request) {
+    public UpdatedEventDto publicGetEvent(Long id, HttpServletRequest request) {
         Event event = getEvent(id);
         if (event.getState() != EventState.PUBLISHED) {
             throw new NotFoundException("Событие не найдено");
@@ -147,7 +147,7 @@ public class EventServiceImpl implements EventService {
         event.setViews(views);
         event = repository.save(event);
         UserDto initiator = userClient.getUserById(event.getInitiatorId());
-        return EventMapper.mapEventToEventDto(event, initiator);
+        return EventMapper.mapEventToUpdatedEventDto(event, initiator);
     }
 
     @Override

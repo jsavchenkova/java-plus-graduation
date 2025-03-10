@@ -1,9 +1,8 @@
 package ewm.event.controller.pub;
 
+import ewm.dto.event.PublicGetEventRequestDto;
 import ewm.dto.event.UpdatedEventDto;
 import ewm.event.EventService;
-import ewm.dto.event.EventDto;
-import ewm.dto.event.PublicGetEventRequestDto;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,16 +20,16 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("events")
 public class PublicEventController {
-	private final EventService eventService;
+    private final EventService eventService;
 
-	@GetMapping
-	public List<UpdatedEventDto> publicGetEvents(HttpServletRequest request, PublicGetEventRequestDto requestParams) {
-		log.info("Получить события, согласно устловиям -> {}", requestParams);
-		return eventService.publicGetEvents(requestParams, request);
-	}
+    @GetMapping
+    public List<UpdatedEventDto> publicGetEvents(HttpServletRequest request, PublicGetEventRequestDto requestParams) {
+        log.info("Получить события, согласно устловиям -> {}", requestParams);
+        return eventService.publicGetEvents(requestParams, request);
+    }
 
-	@GetMapping("/{id}")
-	public EventDto publicGetEvent(@PathVariable Long id, HttpServletRequest request) {
-		return eventService.publicGetEvent(id, request);
-	}
+    @GetMapping("/{id}")
+    public UpdatedEventDto publicGetEvent(@PathVariable Long id, HttpServletRequest request) {
+        return eventService.publicGetEvent(id, request);
+    }
 }
