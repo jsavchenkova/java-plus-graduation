@@ -13,7 +13,7 @@
     <artifactId>event-service</artifactId>
     <packaging>jar</packaging>
 
-    <name>main-service</name>
+    <name>event-service</name>
     <url>http://maven.apache.org</url>
 
     <properties>
