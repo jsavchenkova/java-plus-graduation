@@ -1,5 +1,6 @@
 package ewm.event.controller.pub;
 
+import ewm.dto.event.UpdatedEventDto;
 import ewm.event.EventService;
 import ewm.dto.event.EventDto;
 import ewm.dto.event.PublicGetEventRequestDto;
@@ -23,7 +24,7 @@ public class PublicEventController {
 	private final EventService eventService;
 
 	@GetMapping
-	public List<EventDto> publicGetEvents(HttpServletRequest request, PublicGetEventRequestDto requestParams) {
+	public List<UpdatedEventDto> publicGetEvents(HttpServletRequest request, PublicGetEventRequestDto requestParams) {
 		log.info("Получить события, согласно устловиям -> {}", requestParams);
 		return eventService.publicGetEvents(requestParams, request);
 	}

@@ -98,7 +98,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<EventDto> publicGetEvents(PublicGetEventRequestDto requestParams,
+    public List<UpdatedEventDto> publicGetEvents(PublicGetEventRequestDto requestParams,
                                           HttpServletRequest request) {
         LocalDateTime start = (requestParams.getRangeStart() == null) ?
                 LocalDateTime.now() : requestParams.getRangeStart();
@@ -132,7 +132,7 @@ public class EventServiceImpl implements EventService {
                     .peek(event -> event.setViews(views.get(event.getId())));
             events = repository.saveAll(events);
         }
-        return EventMapper.mapToEventDto(events);
+        return EventMapper.mapToUpdatedEventDto(events);
     }
 
     @Override

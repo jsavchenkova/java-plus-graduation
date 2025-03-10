@@ -24,6 +24,7 @@ import java.util.Optional;
 
 @Service
 @Slf4j
+
 @RequiredArgsConstructor
 public class RequestServiceImpl implements RequestService {
     private final RequestRepository requestRepository;
