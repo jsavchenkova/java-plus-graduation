@@ -174,7 +174,7 @@ services:
 
   ewm-db:
     image: postgres:16.1
-    container_name: postgres-ewm-main-db
+    container_name: postgres-ewm-db
     networks:
       - ewm-net
     environment:
@@ -186,6 +186,28 @@ services:
       timeout: 5s
       interval: 10s
       retries: 15
+
+  db-init:
+    image: postgres:16.1
+    container_name: db-init
+    networks:
+      - ewm-net
+    depends_on:
+      ewm-db:
+        condition: service_healthy
+    environment:
+      PGPASSWORD: root
+    entrypoint:
+      - bash
+      - -c
+      - |
+        set -e
+        psql -U root -h postgres -d postgres -v ON_ERROR_STOP=1 <<-EOSQL
+        create database ewm_user;
+        create database ewm_comment;
+        create database ewm_event;
+        create database ewm_request;
+        EOSQL
 
 networks:
   ewm-net:
