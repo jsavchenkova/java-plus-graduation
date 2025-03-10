@@ -189,7 +189,7 @@ services:
 
   db-init:
     image: postgres:16.1
-    container_name: db-init
+    container_name: db-init-container
     networks:
       - ewm-net
     depends_on:
