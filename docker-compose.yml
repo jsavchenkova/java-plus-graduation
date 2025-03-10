@@ -192,7 +192,7 @@ services:
 
   ewm-db:
     image: postgres:16.1
-    container_name: postgres-ewm-db
+    container_name: ewm-db
     networks:
       - ewm-net
     environment:
