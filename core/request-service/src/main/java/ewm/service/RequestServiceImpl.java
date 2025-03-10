@@ -18,12 +18,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 @Slf4j
-@Transactional(readOnly = true)
+//@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class RequestServiceImpl implements RequestService {
     private final RequestRepository requestRepository;
@@ -92,8 +93,11 @@ public class RequestServiceImpl implements RequestService {
     }
 
     public List<RequestDto> updateAllRequests(List<RequestDto> requestDtoList) {
-        List<Request> requestList = ReqMapper.mapDtoToRequestList(requestDtoList);
-        return ReqMapper.mapListRequests(requestRepository.saveAll(requestList));
+        List<RequestDto> list = new ArrayList<>(requestDtoList.size());
+        for (RequestDto r : requestDtoList) {
+            list.add(updateRequest(r));
+        }
+        return list;
     }
 
     private void checkRequest(Long userId, EventDto event) {
