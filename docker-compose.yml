@@ -220,7 +220,7 @@ services:
       - -c
       - |
         set -e
-        psql -U root -h postgres -d postgres -v ON_ERROR_STOP=1 <<-EOSQL
+        psql -U root -h ewm-db -d postgres -v ON_ERROR_STOP=1 <<-EOSQL
         create database ewm_user;
         create database ewm_comment;
         create database ewm_event;
