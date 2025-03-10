@@ -134,7 +134,7 @@ services:
         interval: 25s
         retries: 10
 
-  comment-srvice:
+  comment-service:
     build: core/comment-service
     container_name: ewm-comment-service
     depends_on:
