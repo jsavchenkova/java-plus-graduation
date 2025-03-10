@@ -94,8 +94,6 @@ services:
     depends_on:
       ewm-db:
         condition: service_healthy
-      db-init:
-        condition: service_healthy
       config-server:
         condition: service_healthy
     networks:
@@ -120,8 +118,6 @@ services:
     depends_on:
       ewm-db:
         condition: service_healthy
-      db-init:
-        condition: service_healthy
       config-server:
         condition: service_healthy
     networks:
@@ -145,8 +141,6 @@ services:
     depends_on:
       ewm-db:
         condition: service_healthy
-      db-init:
-        condition: service_healthy
       config-server:
         condition: service_healthy
     networks:
@@ -169,8 +163,6 @@ services:
     container_name: ewm-main-service
     depends_on:
       ewm-db:
-        condition: service_healthy
-      db-init:
         condition: service_healthy
       config-server:
         condition: service_healthy
