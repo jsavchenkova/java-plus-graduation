@@ -15,11 +15,10 @@ spring:
           uri: lb://request-service
           predicates:
             - Path= /users/*/requests, /users/*/requests/*/cancel, /request/event/*, /request, /request/all, /request/find
-        - id: main-service_route
-          uri: lb://main-service
+        - id: event-service_route
+          uri: lb://event-service
           predicates:
             - Path=/admin/categories, /admin/categories/*, /categories, /categories/*,   /compilations, /compilations/*, /admin/events, /admin/events/*, /users/*/events, /users/*/events/*, /users/*/events/*/requests, /events, /events/*, /users/*/requests, /users/*/requests/*/cancel, /admin/compilations, /admin/compilations/*, /compilations, /compilations/*, /event/*
-#            - Path= /**
 
 server:
   port: 8080

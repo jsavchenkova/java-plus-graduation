@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@FeignClient(name = "main-service")
+@FeignClient(name = "event-service")
 public interface EventClient {
     @GetMapping("/event/{eventId}")
     EventDto getEventById(@PathVariable Long eventId);
