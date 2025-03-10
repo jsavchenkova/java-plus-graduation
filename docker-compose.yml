@@ -39,6 +39,12 @@ services:
         condition: service_healthy
       ewm-service:
         condition: service_healthy
+      user-service:
+        condition: service_healthy
+      comment-service:
+        condition: service_healthy
+      request-service:
+        condition: service_healthy
     networks:
       - ewm-net
     environment:
@@ -84,7 +90,7 @@ services:
 
   ewm-service:
     build: core/event-service
-    container_name: ewm-event-service
+    container_name: ewm-main-service
     depends_on:
       ewm-db:
         condition: service_healthy
@@ -106,7 +112,7 @@ services:
       interval: 25s
       retries: 10
 
-  user-srvice:
+  user-service:
     build: core/user-service
     container_name: ewm-user-service
     depends_on:
@@ -189,7 +195,7 @@ services:
 
   db-init:
     image: postgres:16.1
-    container_name: db-init-container
+    container_name: db-init
     networks:
       - ewm-net
     depends_on:
