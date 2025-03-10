@@ -160,7 +160,7 @@ services:
 
   ewm-service:
     build: core/event-service
-    container_name: ewm-main-service
+    container_name: ewm-event-service
     depends_on:
       ewm-db:
         condition: service_healthy
