@@ -17,13 +17,11 @@ public class EventServiceController implements EventClient {
     private final EventService service;
 
     @Override
-    @GetMapping("/event/{eventId}")
     public EventDto getEventById(@PathVariable Long eventId) {
         return service.publicGetEvent(eventId);
     }
 
     @Override
-    @PostMapping("/event/{eventId}")
     public EventDto updateConfirmRequests(@PathVariable Long eventId, @RequestBody EventDto event) {
         return service.updateConfirmRequests(event);
     }

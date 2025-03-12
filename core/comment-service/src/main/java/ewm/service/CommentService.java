@@ -5,6 +5,7 @@ import ewm.dto.comment.CreateCommentDto;
 
 import java.util.List;
 
+// Управление комментариями
 public interface CommentService {
     CommentDto addComment(Long userId, Long eventId, CreateCommentDto createCommentDto);
 

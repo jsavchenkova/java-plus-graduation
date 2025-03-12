@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -25,11 +24,10 @@ public class ReqMapper {
     }
 
     public static List<RequestDto> mapListRequests(List<Request> requests) {
-        List<RequestDto> list = new ArrayList<>(requests.size());
-        for (Request r : requests) {
-            list.add(mapToRequestDto(r));
-        }
-        return list;
+
+        return requests.stream()
+                .map(ReqMapper::mapToRequestDto)
+                .toList();
     }
 
     public static Request mapDtoToRequest(RequestDto requestDto) {
@@ -45,10 +43,8 @@ public class ReqMapper {
     }
 
     public static List<Request> mapDtoToRequestList(List<RequestDto> requestDtoList) {
-        List<Request> list = new ArrayList<>(requestDtoList.size());
-        for (RequestDto r : requestDtoList) {
-            list.add(mapDtoToRequest(r));
-        }
-        return list;
+        return requestDtoList.stream()
+                .map(ReqMapper::mapDtoToRequest)
+                .toList();
     }
 }

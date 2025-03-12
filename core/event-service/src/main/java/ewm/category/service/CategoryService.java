@@ -5,6 +5,7 @@ import ewm.dto.category.CreateCategoryDto;
 
 import java.util.List;
 
+// Управление категориями
 public interface CategoryService {
     List<CategoryDto> getAll(Integer from, Integer size);
 

@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.List;
 
+// Управление событиями
 public interface EventService {
     List<EventDto> getEvents(Long userId, Integer from, Integer size);
 

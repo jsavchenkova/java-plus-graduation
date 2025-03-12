@@ -18,7 +18,6 @@ public class RequestServiceController implements RequestOperations {
     private final RequestService service;
 
     @Override
-    @PostMapping("/request/all")
     public List<RequestDto> updateAllRequest(List<RequestDto> requestDtoList) {
         return service.updateAllRequests(requestDtoList);
     }
@@ -34,7 +33,6 @@ public class RequestServiceController implements RequestOperations {
     }
 
     @Override
-    @GetMapping("request/find")
     public List<RequestDto> findAllById(List<Long> ids) {
         return service.findAllById(ids);
     }

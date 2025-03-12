@@ -4,6 +4,7 @@ import ewm.dto.request.RequestDto;
 
 import java.util.List;
 
+// Управление заявками
 public interface RequestService {
 	List<RequestDto> getRequests(Long userId);
 

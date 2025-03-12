@@ -4,6 +4,7 @@ import ewm.dto.user.UserDto;
 
 import java.util.List;
 
+// Управление пользователями
 public interface UserService {
 	List<UserDto> getUsers(List<Long> ids, Integer from, Integer size);
 

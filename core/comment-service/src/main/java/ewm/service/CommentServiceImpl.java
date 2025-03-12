@@ -43,14 +43,12 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public CommentDto getComment(Long eventId, Long commentId) {
-//        getEventById(eventId);
         return CommentMapper.INSTANCE.commentToCommentDto(getCommentById(commentId));
     }
 
     @Override
     public List<CommentDto> getEventCommentsByUserId(Long userId, Long eventId) {
         userClient.getUserById(userId);
-//        getEventById(eventId);
         return commentRepository.findAllByEventIdAndAuthorId(eventId, userId)
                 .stream()
                 .map(CommentMapper.INSTANCE::commentToCommentDto)
@@ -59,7 +57,6 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public List<CommentDto> getEventComments(Long eventId) {
-//        getEventById(eventId);
         return commentRepository.findAllByEventId(eventId)
                 .stream()
                 .map(CommentMapper.INSTANCE::commentToCommentDto)
@@ -69,7 +66,6 @@ public class CommentServiceImpl implements CommentService {
     @Override
     @Transactional
     public CommentDto updateComment(Long userId, Long eventId, Long commentId, CreateCommentDto createCommentDto) {
-//        getEventById(eventId);
         Comment comment = getCommentById(commentId);
         UserDto user = userClient.getUserById(userId);
         if (!Objects.equals(comment.getAuthorId(), user.getId())) {
