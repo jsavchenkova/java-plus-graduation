@@ -1,10 +1,10 @@
 package ewm.dto.request;
 
+import ewm.enums.RequestStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ewm.model.RequestStatus;
 
 @Data
 @NoArgsConstructor

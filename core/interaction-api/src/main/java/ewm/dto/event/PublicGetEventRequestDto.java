@@ -1,5 +1,6 @@
 package ewm.dto.event;
 
+import ewm.enums.EventSort;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AllArgsConstructor;
@@ -7,7 +8,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
-import ewm.model.EventSort;
 
 import java.time.LocalDateTime;
 import java.util.List;

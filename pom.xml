@@ -12,7 +12,7 @@
 
 	<name>Explore With Me</name>
 
-	<groupId>ru.practicum</groupId>
+	<groupId>ewm</groupId>
 	<artifactId>explore-with-me</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
@@ -26,7 +26,7 @@
 		<module>core</module>
 		<module>stats</module>
 		<module>infra</module>
-	</modules>
+    </modules>
 
 	<build>
 		<pluginManagement>

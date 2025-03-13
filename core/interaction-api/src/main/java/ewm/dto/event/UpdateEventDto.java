@@ -2,9 +2,9 @@ package ewm.dto.event;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import ewm.enums.StateAction;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.*;
-import ewm.model.StateAction;
 
 import java.time.LocalDateTime;
 
