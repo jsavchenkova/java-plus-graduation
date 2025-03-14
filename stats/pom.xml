@@ -21,6 +21,7 @@
         <module>collector-service</module>
         <module>serialization</module>
         <module>serialization/avro-schemas</module>
+        <module>aggregator-service</module>
     </modules>
 
     <dependencies>
