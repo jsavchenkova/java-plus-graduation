@@ -20,6 +20,7 @@
         <module>stats-server</module>
         <module>collector-service</module>
         <module>serialization</module>
+        <module>serialization/avro-schemas</module>
     </modules>
 
     <dependencies>
