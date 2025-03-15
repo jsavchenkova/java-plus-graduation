@@ -2,6 +2,7 @@ kafka:
   bootstrap-server: localhost:9092
   client-id: AggregatorConsumer
   group-id: some.group.id
+  topic: stats.user-actions.v1
 
 server:
   port: 0
