@@ -23,7 +23,11 @@ grpc:
       keepAliveWithoutCalls: true
       negotiationType: plaintext
 
+  server:
+    port: 0
+
 kafka:
   bootstrap-server: localhost:9092
   client-id: AnalyzerConsumer
   group-id: some.group.id
+

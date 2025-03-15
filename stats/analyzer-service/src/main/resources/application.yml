@@ -23,6 +23,7 @@ eureka:
     instance-id: "${spring.application.name}:${random.value}"
     leaseRenewalIntervalInSeconds: 10
 
+grpc:
   server:
     port: 0
 
