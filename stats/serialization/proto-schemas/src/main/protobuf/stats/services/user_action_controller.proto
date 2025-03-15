@@ -1,7 +1,7 @@
 syntax = "proto3";
 package stats.service.collector;
 
-option java_package = "ewm.grpc.stats.collector";
+option java_package = "ru.practicum.ewm.grpc.stats.collector";
 
 import "google/protobuf/empty.proto";
 

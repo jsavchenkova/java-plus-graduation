@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>ewm</groupId>
+        <groupId>ru.practicum.ewm</groupId>
         <artifactId>stats</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
@@ -18,7 +18,7 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
         <dependency>
-            <groupId>ewm</groupId>
+            <groupId>ru.practicum.ewm</groupId>
             <artifactId>stats-dto</artifactId>
             <version>${project.version}</version>
         </dependency>

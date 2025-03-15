@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>ewm</groupId>
+        <groupId>ru.practicum.ewm</groupId>
         <artifactId>core</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
@@ -23,12 +23,12 @@
     <dependencies>
 
         <dependency>
-            <groupId>ewm</groupId>
+            <groupId>ru.practicum.ewm</groupId>
             <artifactId>stats-client</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>ewm</groupId>
+            <groupId>ru.practicum.ewm</groupId>
             <artifactId>stats-dto</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -105,7 +105,7 @@
             <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
         </dependency>
         <dependency>
-            <groupId>ewm</groupId>
+            <groupId>ru.practicum.ewm</groupId>
             <artifactId>interaction-api</artifactId>
             <version>0.0.1-SNAPSHOT</version>
             <scope>compile</scope>

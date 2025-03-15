@@ -1,6 +1,6 @@
 spring:
   application:
-    name: aggregator-service
+    name: analyzer-service
   config:
     import: "configserver:"
   cloud:

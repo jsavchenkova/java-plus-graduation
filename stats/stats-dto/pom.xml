@@ -17,13 +17,13 @@
     </dependencies>
 
     <parent>
-        <groupId>ewm</groupId>
+        <groupId>ru.practicum.ewm</groupId>
         <artifactId>stats</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
     <artifactId>stats-dto</artifactId>
-    <groupId>ewm</groupId>
+    <groupId>ru.practicum.ewm</groupId>
     <version>0.0.1-SNAPSHOT</version>
 
 
