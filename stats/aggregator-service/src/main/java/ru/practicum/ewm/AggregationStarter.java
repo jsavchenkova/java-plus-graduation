@@ -8,5 +8,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class AggregationStarter {
-    public void start(){}
+    public void start() {
+        int i = 3;
+    }
 }

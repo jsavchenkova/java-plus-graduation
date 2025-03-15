@@ -14,11 +14,11 @@ import ru.practicum.ewm.stats.avro.UserActionAvro;
 public class UserActionService {
 
     @Value("${kafka.topic}")
-    private  String topic;
+    private String topic;
 
     private final KafkaTemplate kafkaTemplate;
 
-    public void collectUserAction(UserActionProto request){
+    public void collectUserAction(UserActionProto request) {
         UserActionAvro userActionAvro = UserActionMapper.mapProtoToUserActionAvro(request);
         ProducerRecord<String, UserActionAvro> userActionRecord = new ProducerRecord<>(topic, userActionAvro);
         kafkaTemplate.send(userActionRecord);

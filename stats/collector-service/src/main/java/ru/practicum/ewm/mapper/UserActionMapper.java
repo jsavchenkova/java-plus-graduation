@@ -9,7 +9,7 @@ import java.time.Instant;
 
 public class UserActionMapper {
 
-    public static UserActionAvro mapProtoToUserActionAvro(UserActionProto userActionProto){
+    public static UserActionAvro mapProtoToUserActionAvro(UserActionProto userActionProto) {
         UserActionAvro userActionAvro = new UserActionAvro();
         userActionAvro.setUserId(userActionProto.getUserId());
         userActionAvro.setEventId(userActionProto.getEventId());
@@ -19,8 +19,8 @@ public class UserActionMapper {
         return userActionAvro;
     }
 
-    public static ActionTypeAvro mapProtoToActionTypeAvro (ActionTypeProto typeProto){
-        switch (typeProto){
+    public static ActionTypeAvro mapProtoToActionTypeAvro(ActionTypeProto typeProto) {
+        switch (typeProto) {
             case ActionTypeProto.ACTION_VIEW:
                 return ActionTypeAvro.VIEW;
             case ActionTypeProto.ACTION_LIKE:
