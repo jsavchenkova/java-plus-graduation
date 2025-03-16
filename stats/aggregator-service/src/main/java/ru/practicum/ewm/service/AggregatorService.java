@@ -1,8 +1,14 @@
 package ru.practicum.ewm.service;
 
+import org.apache.kafka.clients.producer.ProducerRecord;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
+import ru.practicum.ewm.stats.avro.EventSimilarityAvro;
 import ru.practicum.ewm.stats.avro.UserActionAvro;
 
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,6 +17,12 @@ public class AggregatorService {
     Map<Long, Map<Long, Double>> eventWeight;
     Map<Long, Double> eventWeightSum;
     Map<Long, Map<Long, Double>> minWeightsSum;
+
+    @Value("${kafka.topic-sums}")
+    private String topic;
+
+    @Autowired
+    private KafkaTemplate kafkaTemplate;
 
     public AggregatorService() {
         eventWeight = new HashMap<>();
@@ -50,6 +62,8 @@ public class AggregatorService {
                 Double minW = Math.min(eventWeight.get(l).get(userActionAvro.getUserId()),
                         eventWeight.get(userActionAvro.getEventId()).get(userActionAvro.getUserId()));
                 put(userActionAvro.getEventId(), l, minW);
+
+                send(userActionAvro.getEventId(), l, minW, userActionAvro.getTimestamp());
             }
         }
     }
@@ -70,5 +84,14 @@ public class AggregatorService {
         return minWeightsSum
                 .computeIfAbsent(first, e -> new HashMap<>())
                 .getOrDefault(second, 0.0);
+    }
+
+    private void send(long eventA, long eventB, double sum, Instant instant) {
+        long first = Math.min(eventA, eventB);
+        long second = Math.max(eventA, eventB);
+
+        EventSimilarityAvro eventSimilarityAvro = new EventSimilarityAvro(first, second, sum, instant);
+        ProducerRecord<String, EventSimilarityAvro> eventSimilarityRecord = new ProducerRecord<>(topic, eventSimilarityAvro);
+        kafkaTemplate.send(eventSimilarityRecord);
     }
 }

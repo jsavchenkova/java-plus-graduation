@@ -3,6 +3,7 @@ kafka:
   client-id: AggregatorConsumer
   group-id: some.group.id
   topic: stats.user-actions.v1
+  topic-sums: stats.events-similarity.v1
 
 server:
   port: 0
