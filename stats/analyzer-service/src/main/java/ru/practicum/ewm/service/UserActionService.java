@@ -7,6 +7,8 @@ import ru.practicum.ewm.model.UserAction;
 import ru.practicum.ewm.repository.UserActionRepository;
 import ru.practicum.ewm.stats.avro.UserActionAvro;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class UserActionService {
@@ -21,5 +23,9 @@ public class UserActionService {
         userAction.setActionTime(userActionAvro.getTimestamp());
 
         repository.save(userAction);
+    }
+
+    public List<UserAction> getUserActionByUserId(Long userId) {
+        return repository.findAllByUserId(userId);
     }
 }
