@@ -12,7 +12,7 @@ service RecommendationsController {
         returns (stats.message.recomendations.RecommendedEventProto);
 
     rpc GetSimilarEvents (stats.message.recomendations.SimilarEventsRequestProto)
-        returns (stats.message.recomendations.RecommendedEventProto);
+        returns (stream stats.message.recomendations.RecommendedEventProto);
 
     rpc GetInteractionsCount (stats.message.recomendations.InteractionsCountRequestProto)
         returns (stats.message.recomendations.RecommendedEventProto);

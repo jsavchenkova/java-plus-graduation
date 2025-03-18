@@ -217,6 +217,7 @@ services:
         create database ewm_comment;
         create database ewm_event;
         create database ewm_request;
+        create database ewm_stats;
         EOSQL
 
   kafka:

@@ -8,7 +8,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
-import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import ru.practicum.ewm.serialize.UserActionDeserializer;
 import ru.practicum.ewm.stats.avro.UserActionAvro;
 
@@ -19,15 +18,19 @@ import java.util.Map;
 @Configuration
 public class KafkaConsumerConfig {
     @Value("${kafka.bootstrap-server}")
-    private  String bootstrapServer;
+    private String bootstrapServer;
     @Value("${kafka.client-id}")
-    private  String clientId;
+    private String clientId;
     @Value("${kafka.group-id}")
-    private  String groupId;
+    private String groupId;
 
 
     @Bean
-    public ConsumerFactory<String, UserActionAvro> consumerFactory() {
+    public ConcurrentKafkaListenerContainerFactory<String, UserActionAvro> kafkaListenerContainerFactory(
+            ConsumerFactory<String, UserActionAvro> consumerFactory
+    ) {
+        ConcurrentKafkaListenerContainerFactory<String, UserActionAvro> factory =
+                new ConcurrentKafkaListenerContainerFactory<>();
         Map<String, Object> props = new HashMap<>();
         props.put(
                 ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,
@@ -41,16 +44,20 @@ public class KafkaConsumerConfig {
         props.put(
                 ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG,
                 UserActionDeserializer.class);
-        return new DefaultKafkaConsumerFactory<>(props);
-    }
+        consumerFactory.updateConfigs(props);
+        factory.setConsumerFactory(consumerFactory);
 
-    @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, UserActionAvro>
-    kafkaListenerContainerFactory() {
 
-        ConcurrentKafkaListenerContainerFactory<String, UserActionAvro> factory =
-                new ConcurrentKafkaListenerContainerFactory<>();
-        factory.setConsumerFactory(consumerFactory());
         return factory;
     }
+
+//    @Bean
+//    public ConcurrentKafkaListenerContainerFactory<String, UserActionAvro>
+//    kafkaListenerContainerFactory() {
+//
+//        ConcurrentKafkaListenerContainerFactory<String, UserActionAvro> factory =
+//                new ConcurrentKafkaListenerContainerFactory<>();
+//        factory.setConsumerFactory(consumerFactory());
+//        return factory;
+//    }
 }
