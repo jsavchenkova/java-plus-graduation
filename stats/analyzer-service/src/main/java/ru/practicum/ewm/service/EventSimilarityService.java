@@ -6,7 +6,6 @@ import ru.practicum.ewm.grpc.stats.recomendations.RecommendedEventProto;
 import ru.practicum.ewm.grpc.stats.recomendations.SimilarEventsRequestProto;
 import ru.practicum.ewm.grpc.stats.recomendations.UserPredictionsRequestProto;
 import ru.practicum.ewm.model.EventSimilarity;
-import ru.practicum.ewm.model.SimilarEventsRequest;
 import ru.practicum.ewm.model.UserAction;
 import ru.practicum.ewm.repository.EventSimilarityRepository;
 import ru.practicum.ewm.stats.avro.EventSimilarityAvro;
@@ -59,7 +58,12 @@ public class EventSimilarityService {
 
     }
 
-    private List<EventSimilarity> getSimilarEventByUser(Long userId, Long eventId){
-
+    private List<EventSimilarity> getSimilarEventByUser(Long userId, Long eventId) {
+        List<EventSimilarity> list = repository.findByEventAOrEventB(eventId, eventId)
+                .stream()
+                .filter(x ->
+                        x.getEventA() != eventId &&
+                                x.getEventB() != eventId ).toList();
+        list.sort((s1, s2) -> s2.getScore().compareTo(s1.getScore()));
     }
 }
