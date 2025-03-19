@@ -32,6 +32,8 @@ public class RecommendationsController extends RecommendationsControllerGrpc.Rec
 
     @Override
     public void getRecommendationsForUser(UserPredictionsRequestProto request, StreamObserver<RecommendedEventProto> responseObserver) {
-        super.getRecommendationsForUser(request, responseObserver);
+        List<RecommendedEventProto> response = service.getRecommendationsForUser(request);
+        response.stream().forEach(x -> responseObserver.onNext(x));
+        responseObserver.onCompleted();
     }
 }

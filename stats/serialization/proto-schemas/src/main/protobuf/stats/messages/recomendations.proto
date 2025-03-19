@@ -20,7 +20,7 @@ message SimilarEventsRequestProto{
 }
 
 message InteractionsCountRequestProto {
-    int64 event_id = 1; //идентификаторы мероприятий, для которых нужно вернуть сумму всех взаимодействий.
+    repeated int64 event_id = 1; //идентификаторы мероприятий, для которых нужно вернуть сумму всех взаимодействий.
 
 }
 
