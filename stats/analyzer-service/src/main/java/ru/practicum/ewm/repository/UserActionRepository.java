@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface UserActionRepository extends JpaRepository<UserAction, Long> {
     List<UserAction> findAllByUserId(Long userId);
+
+    List<UserAction> findAllByEventId(Long eventId);
 }

@@ -28,4 +28,8 @@ public class UserActionService {
     public List<UserAction> getUserActionByUserId(Long userId) {
         return repository.findAllByUserId(userId);
     }
+
+    public List<UserAction> getUserActionByEventId(Long eventId) {
+        return repository.findAllByEventId(eventId);
+    }
 }

@@ -13,7 +13,6 @@ import ru.practicum.ewm.stats.avro.EventSimilarityAvro;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -51,6 +50,7 @@ public class EventSimilarityService {
     }
 
     public List<RecommendedEventProto> getRecommendationsForUser(UserPredictionsRequestProto request) {
+        // недавно просмотренные события
         List<UserAction> userActionList = userActionService.getUserActionByUserId(request.getUserId());
         List<Long> ids = userActionList.stream()
                 .map(x -> x.getEventId()).toList();
@@ -68,6 +68,7 @@ public class EventSimilarityService {
         if (userActionList.size() == 0) return new ArrayList<>();
         userActionList.sort((s1, s2) -> s2.getActionTime().compareTo(s1.getActionTime()));
         List<UserAction> actionList = userActionList.stream().limit(request.getMaxResults()).toList();
+        // новые похожие события
         Set<RecommendedEventProto> list = new HashSet<>();
         for (UserAction ua : actionList) {
             list.addAll(getSimilarByEventAndUserId(ua.getEventId(), ua.getUserId())
@@ -77,18 +78,20 @@ public class EventSimilarityService {
                         if (x.getEventA() != ua.getEventId()) id = x.getEventA();
                         return RecommendedEventProto.newBuilder()
                                 .setEventId(id)
-                                .setScore(x.getScore())
+                                .setScore(0)
                                 .build();
                     }).toList());
         }
+        // N самых похожих событий
         List<RecommendedEventProto> recList = list.stream()
                 .sorted(Comparator.comparing(RecommendedEventProto::getScore).reversed())
                 .limit(request.getMaxResults())
                 .toList();
 
-        Set<RecommendedEventProto> nSet = new HashSet<>();
+        List<RecommendedEventProto> result = new ArrayList<>();
         for (RecommendedEventProto rep : recList) {
-            nSet.addAll(repository.findByEventAOrEventB(rep.getEventId(), rep.getEventId()).stream()
+            // ближайшие соседи
+            List<RecommendedEventProto> nList = repository.findByEventAOrEventB(rep.getEventId(), rep.getEventId()).stream()
                     .filter(x -> ids.contains(x.getEventB()) || ids.contains(x.getEventA()))
                     .map(x -> {
                         long id = x.getEventB();
@@ -98,18 +101,45 @@ public class EventSimilarityService {
                                 .setScore(x.getScore())
                                 .build();
                     })
-                    .collect(Collectors.toSet()));
+                    .toList();
 
 
+            AtomicReference<Double> sum = new AtomicReference<>(0d);
+            AtomicReference<Double> koef = new AtomicReference<>(0d);
+            nList.stream().limit(request.getMaxResults())
+                    .forEach(x -> sum.set(sum.get() + (x.getScore() * kMap.get(x.getEventId()))));
+            nList.stream().limit(request.getMaxResults())
+                    .forEach(x -> koef.set(koef.get() + x.getScore()));
+            result.add(RecommendedEventProto.newBuilder()
+                    .setEventId(rep.getEventId())
+                    .setScore(sum.get() / koef.get())
+                    .build());
         }
-        AtomicReference<Double> sum = new AtomicReference<>(0d);
-        nSet.stream().limit(request.getMaxResults())
-                .forEach(x -> sum.set(sum.get() + (x.getScore() * kMap.get(x.getEventId()))));
-
+        return result;
     }
 
     public List<RecommendedEventProto> getInteractionsCount(InteractionsCountRequestProto request) {
-        return null;
+        List<RecommendedEventProto> result = new ArrayList<>();
+        for (Long id : request.getEventIdList()) {
+            AtomicReference<Double> sum = new AtomicReference<>(0d);
+            List<UserAction> userActionList = userActionService.getUserActionByEventId(id);
+            userActionList.stream()
+                    .map(x -> {
+                        double weiht = 0;
+                        switch (x.getActionType()) {
+                            case LIKE -> weiht = 1;
+                            case REGISTER -> weiht = 0.8;
+                            case VIEW -> weiht = 0.4;
+                        }
+                        return weiht;
+                    })
+                    .forEach(x -> sum.set(sum.get() + x));
+            result.add(RecommendedEventProto.newBuilder()
+                    .setEventId(id)
+                    .setScore(sum.get())
+                    .build());
+        }
+        return result;
     }
 
     private List<EventSimilarity> getSimilarByEventAndUserId(Long eventId, Long userId) {

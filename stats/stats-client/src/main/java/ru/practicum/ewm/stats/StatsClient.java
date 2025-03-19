@@ -1,5 +1,6 @@
 package ru.practicum.ewm.stats;
 
+import net.devh.boot.grpc.client.inject.GrpcClient;
 import ru.practicum.ewm.client.BaseClient;
 import ru.practicum.ewm.dto.EndpointHitDTO;
 import ru.practicum.ewm.dto.StatsRequestDTO;
@@ -9,49 +10,57 @@ import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.DefaultUriBuilderFactory;
+import ru.practicum.ewm.grpc.stats.analyzer.RecommendationsControllerGrpc;
+import ru.practicum.ewm.grpc.stats.collector.UserActionControllerGrpc;
 
 import java.util.Map;
 
 @Service
 public class StatsClient extends BaseClient {
 
-	@Autowired
-	public StatsClient(@Value("${stats.server.url}") String serverUrl, RestTemplateBuilder builder) {
-		super(
-				builder
-						.uriTemplateHandler(new DefaultUriBuilderFactory(serverUrl))
-						.build()
-		);
-	}
+    @GrpcClient("analyzer-service")
+    private RecommendationsControllerGrpc.RecommendationsControllerBlockingStub recomendationClient;
 
-	public ResponseEntity<Object> saveHit(EndpointHitDTO requestDto) {
-		return post("/hit", requestDto);
-	}
+    @GrpcClient("collector-service")
+    private UserActionControllerGrpc.UserActionControllerBlockingStub userActionClient;
 
-	public ResponseEntity<Object> getStats(StatsRequestDTO headersDto) {
-		Map<String, Object> params = Map.of(
-				"start", headersDto.getStart(),
-				"end", headersDto.getEnd(),
-				"unique", headersDto.getUnique()
-		);
-		return get("/stats" + getUrlParams(headersDto), params);
-	}
+    @Autowired
+    public StatsClient(@Value("${stats.server.url}") String serverUrl, RestTemplateBuilder builder) {
+        super(
+                builder
+                        .uriTemplateHandler(new DefaultUriBuilderFactory(serverUrl))
+                        .build()
+        );
+    }
 
-	private String getUrlParams(StatsRequestDTO headersDto) {
+    public ResponseEntity<Object> saveHit(EndpointHitDTO requestDto) {
+        return post("/hit", requestDto);
+    }
 
-		String urls = String.join(",", headersDto.getUris());
-		StringBuilder sb = new StringBuilder("?");
-		return sb.append(getKeyValueUrl("start", headersDto.getStart()))
-				.append("&")
-				.append(getKeyValueUrl("end", headersDto.getEnd()))
-				.append("&")
-				.append(getKeyValueUrl("uris", urls))
-				.append("&")
-				.append(getKeyValueUrl("unique", headersDto.getUnique()))
-				.toString();
-	}
+    public ResponseEntity<Object> getStats(StatsRequestDTO headersDto) {
+        Map<String, Object> params = Map.of(
+                "start", headersDto.getStart(),
+                "end", headersDto.getEnd(),
+                "unique", headersDto.getUnique()
+        );
+        return get("/stats" + getUrlParams(headersDto), params);
+    }
 
-	private String getKeyValueUrl(String key, Object value) {
-		return key + "=" + value;
-	}
+    private String getUrlParams(StatsRequestDTO headersDto) {
+
+        String urls = String.join(",", headersDto.getUris());
+        StringBuilder sb = new StringBuilder("?");
+        return sb.append(getKeyValueUrl("start", headersDto.getStart()))
+                .append("&")
+                .append(getKeyValueUrl("end", headersDto.getEnd()))
+                .append("&")
+                .append(getKeyValueUrl("uris", urls))
+                .append("&")
+                .append(getKeyValueUrl("unique", headersDto.getUnique()))
+                .toString();
+    }
+
+    private String getKeyValueUrl(String key, Object value) {
+        return key + "=" + value;
+    }
 }
