@@ -242,7 +242,7 @@ public class EventServiceImpl implements EventService {
 
         Long userId = Long.parseLong(request.getHeader("X-EWM-USER-ID"));
         long count = requestClient.getRequestsByEventId(eventId).stream()
-                .filter(x -> x.getRequester() == userId)
+                .filter(x -> x.getRequester().equals(userId))
                 .count();
         if (event.isEmpty() || event.get().getEventDate().isAfter(LocalDateTime.now()) || count == 0) {
             throw new ValidationException("Нельзя поставить лайк, не посетив мероприятие");
