@@ -9,12 +9,12 @@ import "stats/messages/recomendations.proto";
 
 service RecommendationsController {
     rpc GetRecommendationsForUser (stats.message.recomendations.UserPredictionsRequestProto)
-        returns (stats.message.recomendations.RecommendedEventProto);
+        returns (stream stats.message.recomendations.RecommendedEventProto);
 
     rpc GetSimilarEvents (stats.message.recomendations.SimilarEventsRequestProto)
         returns (stream stats.message.recomendations.RecommendedEventProto);
 
     rpc GetInteractionsCount (stats.message.recomendations.InteractionsCountRequestProto)
-        returns (stats.message.recomendations.RecommendedEventProto);
+        returns (stream stats.message.recomendations.RecommendedEventProto);
 
 }

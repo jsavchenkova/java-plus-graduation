@@ -1,35 +1,35 @@
 package ru.practicum.ewm.event;
 
-import ru.practicum.ewm.category.model.Category;
-import ru.practicum.ewm.category.repository.CategoryRepository;
-import ru.practicum.ewm.client.RequestOperations;
-import ru.practicum.ewm.client.UserClient;
-import ru.practicum.ewm.dto.event.*;
-import ru.practicum.ewm.dto.user.UserDto;
-import ru.practicum.ewm.error.exception.ConflictException;
-import ru.practicum.ewm.error.exception.NotFoundException;
-import ru.practicum.ewm.error.exception.ValidationException;
-import ru.practicum.ewm.grpc.CollectorClient;
-import ru.practicum.ewm.grpc.stats.action.UserActionProto;
-import ru.practicum.ewm.mapper.EventMapper;
-import ru.practicum.ewm.event.model.Event;
-import ru.practicum.ewm.enums.EventState;
-import ru.practicum.ewm.enums.StateAction;
-import ru.practicum.ewm.dto.request.RequestDto;
-import ru.practicum.ewm.enums.RequestStatus;
-import ru.practicum.ewm.statistics.service.StatisticsService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import ru.practicum.ewm.category.model.Category;
+import ru.practicum.ewm.category.repository.CategoryRepository;
+import ru.practicum.ewm.client.RequestOperations;
+import ru.practicum.ewm.client.UserClient;
+import ru.practicum.ewm.dto.event.*;
+import ru.practicum.ewm.dto.request.RequestDto;
+import ru.practicum.ewm.dto.user.UserDto;
+import ru.practicum.ewm.enums.EventState;
+import ru.practicum.ewm.enums.RequestStatus;
+import ru.practicum.ewm.enums.StateAction;
+import ru.practicum.ewm.error.exception.ConflictException;
+import ru.practicum.ewm.error.exception.NotFoundException;
+import ru.practicum.ewm.error.exception.ValidationException;
+import ru.practicum.ewm.event.model.Event;
+import ru.practicum.ewm.grpc.CollectorClient;
+import ru.practicum.ewm.grpc.RecommendationsClient;
+import ru.practicum.ewm.grpc.stats.action.UserActionProto;
+import ru.practicum.ewm.grpc.stats.recomendations.RecommendedEventProto;
+import ru.practicum.ewm.mapper.EventMapper;
 
 import java.time.LocalDateTime;
-import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -38,10 +38,10 @@ public class EventServiceImpl implements EventService {
 
     private final EventRepository repository;
     private final CategoryRepository categoryRepository;
-    private final StatisticsService statisticsService;
     private final UserClient userClient;
     private final RequestOperations requestClient;
     private final CollectorClient collectorClient;
+    private final RecommendationsClient recommendationsClient;
 
     @Override
     public List<EventDto> getEvents(Long userId, Integer from, Integer size) {
@@ -102,7 +102,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public List<UpdatedEventDto> publicGetEvents(PublicGetEventRequestDto requestParams,
-                                          HttpServletRequest request) {
+                                                 HttpServletRequest request) {
         LocalDateTime start = (requestParams.getRangeStart() == null) ?
                 LocalDateTime.now() : requestParams.getRangeStart();
         LocalDateTime end = (requestParams.getRangeEnd() == null) ?
@@ -136,11 +136,10 @@ public class EventServiceImpl implements EventService {
                 .setEventId(id)
                 .setUserId(request.getIntHeader("X-EWM-USER-ID"))
                 .build();
-        collectorClient.collectUserAction();
-        statisticsService.saveStats(request);
-        Long views = statisticsService.getStats(
-                event.getPublishedOn(), LocalDateTime.now(), List.of(request.getRequestURI())).get(id);
-        event.setViews(views);
+        collectorClient.collectUserAction(userActionProto);
+        Stream<RecommendedEventProto> rating = recommendationsClient.getInteractionsCount(List.of(id));
+
+        event.setRating(rating.findFirst().get().getScore());
         event = repository.save(event);
         UserDto initiator = userClient.getUserById(event.getInitiatorId());
         return EventMapper.mapEventToUpdatedEventDto(event, initiator);
