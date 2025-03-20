@@ -12,8 +12,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 import ru.practicum.ewm.grpc.stats.analyzer.RecommendationsControllerGrpc;
 import ru.practicum.ewm.grpc.stats.collector.UserActionControllerGrpc;
+import ru.practicum.ewm.grpc.stats.recomendations.RecommendedEventProto;
+import ru.practicum.ewm.grpc.stats.recomendations.SimilarEventsRequestProto;
 
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Spliterator;
+import java.util.Spliterators;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 @Service
 public class StatsClient extends BaseClient {
@@ -32,6 +39,29 @@ public class StatsClient extends BaseClient {
                         .build()
         );
     }
+
+    public Stream<RecommendedEventProto> getSimilarEvents(long eventId, long userId, int maxResults) {
+        SimilarEventsRequestProto request = SimilarEventsRequestProto.newBuilder()
+                .setEventId(eventId)
+                .setUserId(userId)
+                .setMaxResults(maxResults)
+                .build();
+
+        // gRPC-метод getSimilarEvents возвращает Iterator, потому что в его схеме
+        // мы указали, что он должен вернуть поток сообщений (stream stats.message.RecommendedEventProto)
+        Iterator<RecommendedEventProto> iterator = recomendationClient.getSimilarEvents(request);
+
+        // преобразуем Iterator в Stream
+        return asStream(iterator);
+    }
+
+    private Stream<RecommendedEventProto> asStream(Iterator<RecommendedEventProto> iterator) {
+        return StreamSupport.stream(
+                Spliterators.spliteratorUnknownSize(iterator, Spliterator.ORDERED),
+                false
+        );
+    }
+
 
     public ResponseEntity<Object> saveHit(EndpointHitDTO requestDto) {
         return post("/hit", requestDto);
