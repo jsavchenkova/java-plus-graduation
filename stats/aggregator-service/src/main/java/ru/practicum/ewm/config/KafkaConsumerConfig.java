@@ -51,13 +51,5 @@ public class KafkaConsumerConfig {
         return factory;
     }
 
-//    @Bean
-//    public ConcurrentKafkaListenerContainerFactory<String, UserActionAvro>
-//    kafkaListenerContainerFactory() {
-//
-//        ConcurrentKafkaListenerContainerFactory<String, UserActionAvro> factory =
-//                new ConcurrentKafkaListenerContainerFactory<>();
-//        factory.setConsumerFactory(consumerFactory());
-//        return factory;
-//    }
+
 }

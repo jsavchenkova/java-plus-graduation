@@ -1,5 +1,6 @@
 package ru.practicum.ewm.service;
 
+import com.google.protobuf.Timestamp;
 import ru.practicum.ewm.client.EventClient;
 import ru.practicum.ewm.client.UserClient;
 import ru.practicum.ewm.dto.event.EventDto;
@@ -9,6 +10,9 @@ import ru.practicum.ewm.enums.EventState;
 import ru.practicum.ewm.enums.RequestStatus;
 import ru.practicum.ewm.error.exception.ConflictException;
 import ru.practicum.ewm.error.exception.NotFoundException;
+import ru.practicum.ewm.grpc.CollectorClient;
+import ru.practicum.ewm.grpc.stats.action.ActionTypeProto;
+import ru.practicum.ewm.grpc.stats.action.UserActionProto;
 import ru.practicum.ewm.mapper.ReqMapper;
 import ru.practicum.ewm.model.Request;
 import ru.practicum.ewm.repository.RequestRepository;
@@ -17,7 +21,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -30,6 +36,7 @@ public class RequestServiceImpl implements RequestService {
     private final RequestRepository requestRepository;
     private final UserClient userClient;
     private final EventClient eventClient;
+    private final CollectorClient collectorClient;
 
     @Override
     public List<RequestDto> getRequests(Long userId) {
@@ -59,6 +66,18 @@ public class RequestServiceImpl implements RequestService {
             event.setConfirmedRequests(event.getConfirmedRequests() + 1);
             eventClient.updateConfirmRequests(eventId, event);
         }
+        Instant instant = LocalDateTime.now().toInstant(ZoneOffset.UTC);
+
+        Timestamp t = Timestamp.newBuilder()
+                .setSeconds(instant.getEpochSecond())
+                .setNanos(instant.getNano())
+                .build();
+        collectorClient.collectUserAction(UserActionProto.newBuilder()
+                .setActionType(ActionTypeProto.ACTION_REGISTER)
+                .setUserId(userId)
+                .setEventId(eventId)
+                .setTimestamp(t)
+                .build());
         return ReqMapper.mapToRequestDto(request);
     }
 

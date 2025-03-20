@@ -228,6 +228,31 @@ public class EventServiceImpl implements EventService {
         return EventMapper.mapEventToEventDto(repository.save(event), user);
     }
 
+    public List<RecommendationDto> getRecommendations(Long limit, HttpServletRequest request) {
+        return recommendationsClient.getRecommendationsForUser(Long.parseLong(request.getHeader("X-EWM-USER-ID")), limit)
+                .map(x -> RecommendationDto.builder()
+                        .eventId(x.getEventId())
+                        .score(x.getScore())
+                        .build())
+                .toList();
+    }
+
+    public void saveLike(Long eventId, HttpServletRequest request) {
+        Optional<Event> event = repository.findById(eventId);
+
+        Long userId = Long.parseLong(request.getHeader("X-EWM-USER-ID"));
+        long count = requestClient.getRequestsByEventId(eventId).stream()
+                .filter(x -> x.getRequester() == userId)
+                .count();
+        if (event.isEmpty() || event.get().getEventDate().isAfter(LocalDateTime.now()) || count == 0) {
+            throw new ValidationException("Нельзя поставить лайк, не посетив мероприятие");
+        }
+        collectorClient.collectUserAction(UserActionProto.newBuilder()
+                .setEventId(eventId)
+                .setUserId(userId)
+                .build());
+    }
+
     private EventDto eventToDto(Event event) {
         return EventMapper.mapEventToEventDto(event, userClient.getUserById(event.getInitiatorId()));
     }

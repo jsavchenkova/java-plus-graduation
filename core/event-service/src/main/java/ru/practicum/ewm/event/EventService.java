@@ -1,8 +1,8 @@
 package ru.practicum.ewm.event;
 
+import jakarta.servlet.http.HttpServletRequest;
 import ru.practicum.ewm.dto.event.*;
 import ru.practicum.ewm.dto.request.RequestDto;
-import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.List;
 
@@ -31,4 +31,8 @@ public interface EventService {
     EventRequestStatusUpdateResult changeStatusEventRequests(Long userId, Long eventId, EventRequestStatusUpdateRequest request);
 
     EventDto updateConfirmRequests(EventDto eventDto);
+
+    List<RecommendationDto> getRecommendations(Long limit, HttpServletRequest request);
+
+    void saveLike(Long eventId, HttpServletRequest request);
 }
