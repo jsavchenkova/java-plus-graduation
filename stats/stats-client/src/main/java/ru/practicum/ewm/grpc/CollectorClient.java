@@ -10,7 +10,7 @@ public class CollectorClient {
     @GrpcClient("collector-service")
     private UserActionControllerGrpc.UserActionControllerBlockingStub client;
 
-    public void collectUserAction(UserActionProto userActionProto){
+    public void collectUserAction(UserActionProto userActionProto) {
         client.collectUserAction(userActionProto);
     }
 }
