@@ -9,6 +9,8 @@ import ru.practicum.ewm.dto.user.UserDto;
 import ru.practicum.ewm.error.exception.ConflictException;
 import ru.practicum.ewm.error.exception.NotFoundException;
 import ru.practicum.ewm.error.exception.ValidationException;
+import ru.practicum.ewm.grpc.CollectorClient;
+import ru.practicum.ewm.grpc.stats.action.UserActionProto;
 import ru.practicum.ewm.mapper.EventMapper;
 import ru.practicum.ewm.event.model.Event;
 import ru.practicum.ewm.enums.EventState;
@@ -39,6 +41,7 @@ public class EventServiceImpl implements EventService {
     private final StatisticsService statisticsService;
     private final UserClient userClient;
     private final RequestOperations requestClient;
+    private final CollectorClient collectorClient;
 
     @Override
     public List<EventDto> getEvents(Long userId, Integer from, Integer size) {
@@ -119,19 +122,7 @@ public class EventServiceImpl implements EventService {
                         requestParams.getSize())
         );
 
-        statisticsService.saveStats(request);
-        if (!events.isEmpty()) {
-            LocalDateTime oldestEventPublishedOn = events.stream()
-                    .min(Comparator.comparing(Event::getPublishedOn)).map(Event::getPublishedOn).stream()
-                    .findFirst().orElseThrow();
-            List<String> uris = getListOfUri(events, request.getRequestURI());
 
-            Map<Long, Long> views = statisticsService.getStats(oldestEventPublishedOn, LocalDateTime.now(), uris);
-            events
-                    .stream()
-                    .peek(event -> event.setViews(views.get(event.getId())));
-            events = repository.saveAll(events);
-        }
         return EventMapper.mapToUpdatedEventDto(events);
     }
 
@@ -141,6 +132,11 @@ public class EventServiceImpl implements EventService {
         if (event.getState() != EventState.PUBLISHED) {
             throw new NotFoundException("Событие не найдено");
         }
+        UserActionProto userActionProto = UserActionProto.newBuilder()
+                .setEventId(id)
+                .setUserId(request.getIntHeader("X-EWM-USER-ID"))
+                .build();
+        collectorClient.collectUserAction();
         statisticsService.saveStats(request);
         Long views = statisticsService.getStats(
                 event.getPublishedOn(), LocalDateTime.now(), List.of(request.getRequestURI())).get(id);

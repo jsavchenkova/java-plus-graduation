@@ -18,3 +18,11 @@ spring:
     url: jdbc:postgresql://localhost:5433/ewm_event
     username: test
     password: test
+
+grpc:
+  client:
+    collector-service: # <- должно соответствовать значению в @GrpcClient
+      address: 'discovery:///collector-service' # адрес gRPC-сервиса
+      enableKeepAlive: true
+      keepAliveWithoutCalls: true
+      negotiationType: plaintext

@@ -49,7 +49,7 @@ public class EventMapper {
                 .category(categoryDto)
                 .initiator(initiator)
                 .requestModeration(event.getRequestModeration())
-                .views((event.getViews() == null) ? 0L : event.getViews())
+                .rating((event.getRating() == null) ? 0L : event.getRating())
                 .confirmedRequests(event.getConfirmedRequests())
                 .build();
         return dto;
@@ -103,7 +103,7 @@ public class EventMapper {
         event.setInitiatorId(dto.getInitiator().getId());
         event.setLat(dto.getLocation().getLat());
         event.setLon(dto.getLocation().getLon());
-        event.setViews(dto.getViews());
+        event.setRating(dto.getRating());
         event.setConfirmedRequests(dto.getConfirmedRequests());
 
         return event;
@@ -126,7 +126,7 @@ public class EventMapper {
                 .category(categoryDto)
                 .initiator(initiator)
                 .requestModeration(event.getRequestModeration())
-                .views((event.getViews() == null) ? 0L : event.getViews())
+                .rating((event.getRating() == null) ? 0L : event.getRating())
                 .confirmedRequests(event.getConfirmedRequests())
                 .build();
         return dto;
