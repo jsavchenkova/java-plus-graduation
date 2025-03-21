@@ -1,11 +1,15 @@
 package ru.practicum.ewm.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import lombok.Data;
 
 import java.time.Instant;
 
+@Entity
 @Data
 public class UserAction {
+    @Id
     private Long id;
     private Long userId;
     private Long eventId;
