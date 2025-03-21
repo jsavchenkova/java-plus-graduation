@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>ewm</groupId>
+        <groupId>ru.practicum.ewm</groupId>
         <artifactId>explore-with-me</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
@@ -16,8 +16,11 @@
 
     <modules>
         <module>stats-client</module>
-        <module>stats-dto</module>
-        <module>stats-server</module>
+        <module>collector-service</module>
+        <module>serialization</module>
+        <module>serialization/avro-schemas</module>
+        <module>aggregator-service</module>
+        <module>analyzer-service</module>
     </modules>
 
     <dependencies>
