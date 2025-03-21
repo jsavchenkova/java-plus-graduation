@@ -66,18 +66,22 @@ public class RequestServiceImpl implements RequestService {
             event.setConfirmedRequests(event.getConfirmedRequests() + 1);
             eventClient.updateConfirmRequests(eventId, event);
         }
-        Instant instant = LocalDateTime.now().toInstant(ZoneOffset.UTC);
+        try {
+            Instant instant = LocalDateTime.now().toInstant(ZoneOffset.UTC);
 
-        Timestamp t = Timestamp.newBuilder()
-                .setSeconds(instant.getEpochSecond())
-                .setNanos(instant.getNano())
-                .build();
-        collectorClient.collectUserAction(UserActionProto.newBuilder()
-                .setActionType(ActionTypeProto.ACTION_REGISTER)
-                .setUserId(userId)
-                .setEventId(eventId)
-                .setTimestamp(t)
-                .build());
+            Timestamp t = Timestamp.newBuilder()
+                    .setSeconds(instant.getEpochSecond())
+                    .setNanos(instant.getNano())
+                    .build();
+            collectorClient.collectUserAction(UserActionProto.newBuilder()
+                    .setActionType(ActionTypeProto.ACTION_REGISTER)
+                    .setUserId(userId)
+                    .setEventId(eventId)
+                    .setTimestamp(t)
+                    .build());
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
         return ReqMapper.mapToRequestDto(request);
     }
 

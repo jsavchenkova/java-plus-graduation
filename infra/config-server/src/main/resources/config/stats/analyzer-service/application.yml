@@ -23,8 +23,8 @@ grpc:
       keepAliveWithoutCalls: true
       negotiationType: plaintext
 
-  server:
-    port: 0
+server:
+  port: 0
 
 kafka:
   bootstrap-server: localhost:9092

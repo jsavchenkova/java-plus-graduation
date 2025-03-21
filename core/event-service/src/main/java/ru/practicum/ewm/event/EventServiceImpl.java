@@ -2,6 +2,7 @@ package ru.practicum.ewm.event;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -26,11 +27,13 @@ import ru.practicum.ewm.grpc.stats.recomendations.RecommendedEventProto;
 import ru.practicum.ewm.mapper.EventMapper;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class EventServiceImpl implements EventService {
@@ -136,11 +139,15 @@ public class EventServiceImpl implements EventService {
                 .setEventId(id)
                 .setUserId(request.getIntHeader("X-EWM-USER-ID"))
                 .build();
-        collectorClient.collectUserAction(userActionProto);
-        Stream<RecommendedEventProto> rating = recommendationsClient.getInteractionsCount(List.of(id));
+        try {
+            collectorClient.collectUserAction(userActionProto);
+            Stream<RecommendedEventProto> rating = recommendationsClient.getInteractionsCount(List.of(id));
 
-        event.setRating(rating.findFirst().get().getScore());
-        event = repository.save(event);
+            event.setRating(rating.findFirst().get().getScore());
+            event = repository.save(event);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
         UserDto initiator = userClient.getUserById(event.getInitiatorId());
         return EventMapper.mapEventToUpdatedEventDto(event, initiator);
     }
@@ -229,12 +236,17 @@ public class EventServiceImpl implements EventService {
     }
 
     public List<RecommendationDto> getRecommendations(Long limit, HttpServletRequest request) {
-        return recommendationsClient.getRecommendationsForUser(Long.parseLong(request.getHeader("X-EWM-USER-ID")), limit)
-                .map(x -> RecommendationDto.builder()
-                        .eventId(x.getEventId())
-                        .score(x.getScore())
-                        .build())
-                .toList();
+        try {
+            return recommendationsClient.getRecommendationsForUser(Long.parseLong(request.getHeader("X-EWM-USER-ID")), limit)
+                    .map(x -> RecommendationDto.builder()
+                            .eventId(x.getEventId())
+                            .score(x.getScore())
+                            .build())
+                    .toList();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return new ArrayList<>();
+        }
     }
 
     public void saveLike(Long eventId, HttpServletRequest request) {
@@ -247,10 +259,14 @@ public class EventServiceImpl implements EventService {
         if (event.isEmpty() || event.get().getEventDate().isAfter(LocalDateTime.now()) || count == 0) {
             throw new ValidationException("Нельзя поставить лайк, не посетив мероприятие");
         }
-        collectorClient.collectUserAction(UserActionProto.newBuilder()
-                .setEventId(eventId)
-                .setUserId(userId)
-                .build());
+        try {
+            collectorClient.collectUserAction(UserActionProto.newBuilder()
+                    .setEventId(eventId)
+                    .setUserId(userId)
+                    .build());
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
     }
 
     private EventDto eventToDto(Event event) {
