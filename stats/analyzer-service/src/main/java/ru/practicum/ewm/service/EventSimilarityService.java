@@ -75,7 +75,7 @@ public class EventSimilarityService {
                     .stream()
                     .map(x -> {
                         long id = x.getEventB();
-                        if (x.getEventA() != ua.getEventId()) id = x.getEventA();
+                        if (!x.getEventA().equals(ua.getEventId())) id = x.getEventA();
                         return RecommendedEventProto.newBuilder()
                                 .setEventId(id)
                                 .setScore(0)
