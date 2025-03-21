@@ -27,5 +27,5 @@ grpc:
   server:
     port: 0
 
-  logging.level:
-    root: DEBUG
+logging.level:
+  root: DEBUG
