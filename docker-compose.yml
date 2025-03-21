@@ -114,7 +114,7 @@ services:
 
   collector-service:
     build: stats/collector-service
-    container_name: ewm-collector-service
+    container_name: collector-service
     depends_on:
       ewm-db:
         condition: service_healthy
