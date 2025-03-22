@@ -38,6 +38,7 @@ import java.util.stream.Stream;
 @RequiredArgsConstructor
 public class EventServiceImpl implements EventService {
     private static final String EVENT_NOT_FOUND_MESSAGE = "Event not found";
+    private static final String USER_ID_HEADER = "X-EWM-USER-ID";
 
     private final EventRepository repository;
     private final CategoryRepository categoryRepository;
@@ -137,14 +138,16 @@ public class EventServiceImpl implements EventService {
         }
         UserActionProto userActionProto = UserActionProto.newBuilder()
                 .setEventId(id)
-                .setUserId(request.getIntHeader("X-EWM-USER-ID"))
+                .setUserId(request.getIntHeader(USER_ID_HEADER))
                 .build();
         try {
             collectorClient.collectUserAction(userActionProto);
             Stream<RecommendedEventProto> rating = recommendationsClient.getInteractionsCount(List.of(id));
 
-            event.setRating(rating.findFirst().get().getScore());
-            event = repository.save(event);
+            if (rating.findFirst().isPresent()) {
+                event.setRating(rating.findFirst().get().getScore());
+                event = repository.save(event);
+            }
         } catch (Exception e) {
             log.error(e.getMessage());
         }
@@ -237,7 +240,7 @@ public class EventServiceImpl implements EventService {
 
     public List<RecommendationDto> getRecommendations(Long limit, HttpServletRequest request) {
         try {
-            return recommendationsClient.getRecommendationsForUser(Long.parseLong(request.getHeader("X-EWM-USER-ID")), limit)
+            return recommendationsClient.getRecommendationsForUser(Long.parseLong(request.getHeader(USER_ID_HEADER)), limit)
                     .map(x -> RecommendationDto.builder()
                             .eventId(x.getEventId())
                             .score(x.getScore())
@@ -252,7 +255,7 @@ public class EventServiceImpl implements EventService {
     public void saveLike(Long eventId, HttpServletRequest request) {
         Optional<Event> event = repository.findById(eventId);
 
-        Long userId = Long.parseLong(request.getHeader("X-EWM-USER-ID"));
+        Long userId = Long.parseLong(request.getHeader(USER_ID_HEADER));
         long count = requestClient.getRequestsByEventId(eventId).stream()
                 .filter(x -> x.getRequester().equals(userId))
                 .count();

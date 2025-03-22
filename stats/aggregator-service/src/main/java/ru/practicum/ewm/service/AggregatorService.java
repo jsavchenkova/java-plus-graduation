@@ -11,12 +11,13 @@ import ru.practicum.ewm.stats.avro.UserActionAvro;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Service
 public class AggregatorService {
-    Map<Long, Map<Long, Double>> eventWeight;
-    Map<Long, Double> eventWeightSum;
-    Map<Long, Map<Long, Double>> minWeightsSum;
+    private Map<Long, Map<Long, Double>> eventWeight;
+    private Map<Long, Double> eventWeightSum;
+    private Map<Long, Map<Long, Double>> minWeightsSum;
 
     @Value("${kafka.topic-sums}")
     private String topic;
@@ -48,12 +49,11 @@ public class AggregatorService {
             eventWeight.get(userActionAvro.getEventId()).put(userActionAvro.getUserId(), weiht);
         }
 
-        Double sum = 0d;
-        for (Double d : eventWeight.get(userActionAvro.getEventId()).values()) {
-            sum += d;
-        }
+        AtomicReference<Double> sum = new AtomicReference<>(0d);
+        eventWeight.get(userActionAvro.getEventId()).values().stream()
+                .forEach(x -> sum.set(sum.get() + x));
 
-        eventWeightSum.put(userActionAvro.getEventId(), sum);
+        eventWeightSum.put(userActionAvro.getEventId(), sum.get());
 
 
         for (Long l : eventWeight.keySet()) {
